@@ -2,7 +2,9 @@
 // Copyright (c) 2012 Daniele Giardini - Holoville - http://www.holoville.com
 // Created: 2012/09/24 14:51
 
+using System;
 using System.IO;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -80,6 +82,23 @@ namespace Holoville.HOEditorUtils
         {
             string fullPath = ADBPathToFullPath(adbPath);
             return File.Exists(fullPath) || Directory.Exists(fullPath);
+        }
+
+        /// <summary>
+        /// Returns the path (in AssetDatabase format: "/" slashes and no final slash)
+        /// to the assembly that contains the given target.
+        /// </summary>
+        /// <param name="target">Target whose assembly path to return</param>
+        /// <returns></returns>
+        public static string GetAssemblyADBPath(object target)
+        {
+//            UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
+            UriBuilder uri = new UriBuilder(target.GetType().Assembly.CodeBase);
+            string path = Uri.UnescapeDataString(uri.Path);
+            string adbAssemblyPath = Path.GetDirectoryName(path);
+            adbAssemblyPath = adbAssemblyPath.Replace("\\", "/");
+            adbAssemblyPath = adbAssemblyPath.Substring(projectPath.Length + 1);
+            return adbAssemblyPath.Substring(0, adbAssemblyPath.LastIndexOf("/"));
         }
     }
 }

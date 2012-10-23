@@ -67,9 +67,7 @@ namespace Holoville.DebugFramework.Components
         {
             if (!_stylesSet) {
                 _stylesSet = true;
-                _fpsStyle = new GUIStyle(GUI.skin.box);
-                _fpsStyle.alignment = TextAnchor.UpperLeft;
-                _fpsStyle.normal.textColor = Color.white;
+                _fpsStyle = new GUIStyle(GUI.skin.box) { alignment = TextAnchor.UpperLeft, normal = { textColor = Color.white } };
             }
 
             int boxW = (showMemory ? 190 : 100);

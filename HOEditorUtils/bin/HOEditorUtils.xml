@@ -34,6 +34,14 @@
             <param name="adbPath">Path, relative to Unity's project folder</param>
             <returns></returns>
         </member>
+        <member name="M:Holoville.HOEditorUtils.HOFileUtils.GetAssemblyADBPath(System.Object)">
+            <summary>
+            Returns the path (in AssetDatabase format: "/" slashes and no final slash)
+            to the assembly that contains the given target.
+            </summary>
+            <param name="target">Target whose assembly path to return</param>
+            <returns></returns>
+        </member>
         <member name="P:Holoville.HOEditorUtils.HOFileUtils.projectPath">
             <summary>
             Full path to project directory, with backwards (\) slashes.

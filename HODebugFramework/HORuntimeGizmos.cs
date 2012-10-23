@@ -46,8 +46,8 @@ namespace Holoville.DebugFramework
         /// </summary>
         public static Color defColor = Color.magenta;
 
+        static readonly List<HOGizmoData> _GizmosData = new List<HOGizmoData>();
         static bool _isInstantiated;
-        static List<HOGizmoData> _gizmosData = new List<HOGizmoData>();
 
 
         // ===================================================================================
@@ -60,8 +60,8 @@ namespace Holoville.DebugFramework
 
         void OnDrawGizmos()
         {
-            for (int i = _gizmosData.Count - 1; i > -1; --i) {
-                HOGizmoData gd = _gizmosData[i];
+            for (int i = _GizmosData.Count - 1; i > -1; --i) {
+                HOGizmoData gd = _GizmosData[i];
                 Gizmos.color = gd.color;
                 switch (gd.type) {
                     case GizmoType.Point:
@@ -92,7 +92,7 @@ namespace Holoville.DebugFramework
                         Gizmos.DrawLine(gd.position, gd.endPosition);
                         break;
                 }
-                if (gd.drawOnlyOnce) _gizmosData.RemoveAt(i);
+                if (gd.drawOnlyOnce) _GizmosData.RemoveAt(i);
             }
         }
 
@@ -116,7 +116,7 @@ namespace Holoville.DebugFramework
                 radius = radius,
                 drawOnlyOnce = drawOnlyOnce
             };
-            _gizmosData.Add(gd);
+            _GizmosData.Add(gd);
         }
 
         /// <summary>Adds a target to be constantly evidenced.</summary>
@@ -131,7 +131,7 @@ namespace Holoville.DebugFramework
                 color = color,
                 drawOnlyOnce = drawOnlyOnce
             };
-            _gizmosData.Add(gd);
+            _GizmosData.Add(gd);
         }
 
         /// <summary>Adds a line to be constantly drawn as a gizmo.</summary>
@@ -156,7 +156,7 @@ namespace Holoville.DebugFramework
                 color = color,
                 drawOnlyOnce = drawOnlyOnce
             };
-            _gizmosData.Add(gd);
+            _GizmosData.Add(gd);
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace Holoville.DebugFramework
         /// </summary>
         public static void Clear()
         {
-            _gizmosData = new List<HOGizmoData>();
+            _GizmosData.Clear();
         }
 
         // ===================================================================================
