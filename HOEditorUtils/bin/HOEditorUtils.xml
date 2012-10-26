@@ -42,11 +42,22 @@
             <param name="target">Target whose assembly path to return</param>
             <returns></returns>
         </member>
-        <member name="M:Holoville.HOEditorUtils.HOFileUtils.GetNewPrefabPath(System.String)">
+        <member name="M:Holoville.HOEditorUtils.HOFileUtils.GetNewAssetPathFromSelection(System.String)">
             <summary>
-            Returns a new prefab path based on the given name,
-            so that it can be used to create new prefabs in the project window.
+            Returns a new asset path based on the given fileName and current selection,
+            so that it can be used to create new assets in the project window.
             </summary>
+            <param name="fileName">New name to apply, extension included 
+            (the correct int will be added if that name already exist)</param>
+        </member>
+        <member name="M:Holoville.HOEditorUtils.HOFileUtils.RenameAsset(System.String,System.String)">
+            <summary>
+            Renames the given asset with the new name,
+            adding an eventual int to the name in case the new name already exists
+            </summary>
+            <param name="assetADBPath"></param>
+            <param name="fileName">File name extension included</param>
+            <returns></returns>
         </member>
         <member name="P:Holoville.HOEditorUtils.HOFileUtils.projectPath">
             <summary>

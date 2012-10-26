@@ -103,31 +103,67 @@ namespace Holoville.HOEditorUtils
         }
 
         /// <summary>
-        /// Returns a new prefab path based on the given name,
-        /// so that it can be used to create new prefabs in the project window.
+        /// Returns a new asset path based on the given fileName and current selection,
+        /// so that it can be used to create new assets in the project window.
         /// </summary>
-        static public string GetNewPrefabPath(string name)
+        /// <param name="fileName">New name to apply, extension included 
+        /// (the correct int will be added if that name already exist)</param>
+        static public string GetNewAssetPathFromSelection(string fileName)
         {
             Object selectedObj = Selection.activeObject;
-            string assetPath = AssetDatabase.GetAssetPath(selectedObj);
-            string prefabDirectoryPath;
-            if (assetPath.Length > 0) {
-                prefabDirectoryPath = ADBPathToFullPath(assetPath);
-                if ((File.GetAttributes(prefabDirectoryPath) & FileAttributes.Directory) != FileAttributes.Directory) {
-                    prefabDirectoryPath = prefabDirectoryPath.Substring(0, prefabDirectoryPath.LastIndexOf("\\"));
+            string selectionADBPath = AssetDatabase.GetAssetPath(selectedObj);
+            string assetDirectoryPath;
+            if (selectionADBPath.Length > 0) {
+                assetDirectoryPath = ADBPathToFullPath(selectionADBPath);
+                if ((File.GetAttributes(assetDirectoryPath) & FileAttributes.Directory) != FileAttributes.Directory) {
+                    assetDirectoryPath = assetDirectoryPath.Substring(0, assetDirectoryPath.LastIndexOf("\\"));
                 }
             } else {
-                prefabDirectoryPath = assetsPath;
+                assetDirectoryPath = assetsPath;
             }
             // Set correct filename
-            const string suffix = ".prefab";
-            string prefabPath = prefabDirectoryPath + "\\" + name + suffix;
+            int dotInd = fileName.IndexOf(".");
+            if (dotInd == -1) {
+                Debug.LogError("HOFileUtils.GetNewAssetPathFromSelection: fileName parameter is missing extension");
+                return null;
+            }
+            string name = fileName.Substring(0, dotInd);
+            string extension = fileName.Substring(dotInd);
+            string assetPath = assetDirectoryPath + "\\" + fileName;
             int num = 0;
-            while (File.Exists(prefabPath)) {
-                prefabPath = prefabDirectoryPath + "\\" + name + " " + (++num) + suffix;
+            while (File.Exists(assetPath)) {
+                assetPath = assetDirectoryPath + "\\" + name + " " + (++num) + extension;
             }
 
-            return FullPathToADBPath(prefabPath);
+            return FullPathToADBPath(assetPath);
+        }
+
+        /// <summary>
+        /// Renames the given asset with the new name,
+        /// adding an eventual int to the name in case the new name already exists
+        /// </summary>
+        /// <param name="assetADBPath"></param>
+        /// <param name="fileName">File name extension included</param>
+        /// <returns></returns>
+        static public void RenameAsset(string assetADBPath, string fileName)
+        {
+            string assetDirectoryPath = ADBPathToFullPath(assetADBPath);
+            assetDirectoryPath = assetDirectoryPath.Substring(0, assetDirectoryPath.LastIndexOf("\\"));
+            int dotInd = fileName.IndexOf(".");
+            if (dotInd == -1) {
+                Debug.LogError("HOFileUtils.RenameAsset: fileName parameter is missing extension");
+                return;
+            }
+            string name = fileName.Substring(0, dotInd);
+            string extension = fileName.Substring(dotInd);
+            string newAssetPath = assetDirectoryPath + "\\" + fileName;
+            int num = 0;
+            while (File.Exists(newAssetPath)) {
+                fileName = name + " " + (++num) + extension;
+                newAssetPath = assetDirectoryPath + "\\" + fileName;
+            }
+            string res = AssetDatabase.RenameAsset(assetADBPath, fileName);
+            if (res != "") Debug.LogError(res);
         }
     }
 }
