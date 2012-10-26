@@ -42,9 +42,9 @@
             <param name="target">Target whose assembly path to return</param>
             <returns></returns>
         </member>
-        <member name="M:Holoville.HOEditorUtils.HOFileUtils.GetNewAssetPathFromSelection(System.String)">
+        <member name="M:Holoville.HOEditorUtils.HOFileUtils.GenerateUniqueAssetPathFromSelection(System.String)">
             <summary>
-            Returns a new asset path based on the given fileName and current selection,
+            Returns a new unique asset path based on the given fileName and current selection,
             so that it can be used to create new assets in the project window.
             </summary>
             <param name="fileName">New name to apply, extension included 
@@ -52,21 +52,21 @@
         </member>
         <member name="M:Holoville.HOEditorUtils.HOFileUtils.RenameAsset(System.String,System.String)">
             <summary>
-            Renames the given asset with the new name,
-            adding an eventual int to the name in case the new name already exists
+            Renames the given asset with the new name, while keeping it unique automatically
+            by adding an eventual int suffix in case the new name already exists.
             </summary>
             <param name="assetADBPath"></param>
-            <param name="fileName">File name extension included</param>
+            <param name="newName">File name without extension</param>
             <returns></returns>
         </member>
         <member name="P:Holoville.HOEditorUtils.HOFileUtils.projectPath">
             <summary>
-            Full path to project directory, with backwards (\) slashes.
+            Full path to project directory, with backwards (\) slashes and no final slash.
             </summary>
         </member>
         <member name="P:Holoville.HOEditorUtils.HOFileUtils.assetsPath">
             <summary>
-            Full path to project's Assets directory, with backwards (\) slashes.
+            Full path to project's Assets directory, with backwards (\) slashes and no final slash.
             </summary>
         </member>
         <member name="T:Holoville.HOEditorUtils.HOPrefabUtils">

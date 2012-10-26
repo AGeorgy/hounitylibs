@@ -17,7 +17,7 @@ namespace Holoville.HOEditorUtils
     public static class HOFileUtils
     {
         /// <summary>
-        /// Full path to project directory, with backwards (\) slashes.
+        /// Full path to project directory, with backwards (\) slashes and no final slash.
         /// </summary>
         public static string projectPath
         {
@@ -32,7 +32,7 @@ namespace Holoville.HOEditorUtils
             }
         }
         /// <summary>
-        /// Full path to project's Assets directory, with backwards (\) slashes.
+        /// Full path to project's Assets directory, with backwards (\) slashes and no final slash.
         /// </summary>
         public static string assetsPath { get { return projectPath + "\\Assets"; } }
 
@@ -103,66 +103,48 @@ namespace Holoville.HOEditorUtils
         }
 
         /// <summary>
-        /// Returns a new asset path based on the given fileName and current selection,
+        /// Returns a new unique asset path based on the given fileName and current selection,
         /// so that it can be used to create new assets in the project window.
         /// </summary>
         /// <param name="fileName">New name to apply, extension included 
         /// (the correct int will be added if that name already exist)</param>
-        static public string GetNewAssetPathFromSelection(string fileName)
+        static public string GenerateUniqueAssetPathFromSelection(string fileName)
         {
             Object selectedObj = Selection.activeObject;
             string selectionADBPath = AssetDatabase.GetAssetPath(selectedObj);
-            string assetDirectoryPath;
+            string assetADBPath;
             if (selectionADBPath.Length > 0) {
-                assetDirectoryPath = ADBPathToFullPath(selectionADBPath);
+                string assetDirectoryPath = ADBPathToFullPath(selectionADBPath);
                 if ((File.GetAttributes(assetDirectoryPath) & FileAttributes.Directory) != FileAttributes.Directory) {
                     assetDirectoryPath = assetDirectoryPath.Substring(0, assetDirectoryPath.LastIndexOf("\\"));
                 }
+                assetADBPath = FullPathToADBPath(assetDirectoryPath) + "/" + fileName;
             } else {
-                assetDirectoryPath = assetsPath;
+                assetADBPath = FullPathToADBPath(assetsPath) + "/" + fileName;
             }
-            // Set correct filename
-            int dotInd = fileName.IndexOf(".");
-            if (dotInd == -1) {
-                Debug.LogError("HOFileUtils.GetNewAssetPathFromSelection: fileName parameter is missing extension");
-                return null;
-            }
-            string name = fileName.Substring(0, dotInd);
-            string extension = fileName.Substring(dotInd);
-            string assetPath = assetDirectoryPath + "\\" + fileName;
-            int num = 0;
-            while (File.Exists(assetPath)) {
-                assetPath = assetDirectoryPath + "\\" + name + " " + (++num) + extension;
-            }
-
-            return FullPathToADBPath(assetPath);
+            return AssetDatabase.GenerateUniqueAssetPath(assetADBPath);
         }
 
         /// <summary>
-        /// Renames the given asset with the new name,
-        /// adding an eventual int to the name in case the new name already exists
+        /// Renames the given asset with the new name, while keeping it unique automatically
+        /// by adding an eventual int suffix in case the new name already exists.
         /// </summary>
         /// <param name="assetADBPath"></param>
-        /// <param name="fileName">File name extension included</param>
+        /// <param name="newName">File name without extension</param>
         /// <returns></returns>
-        static public void RenameAsset(string assetADBPath, string fileName)
+        static public void RenameAsset(string assetADBPath, string newName)
         {
-            string assetDirectoryPath = ADBPathToFullPath(assetADBPath);
-            assetDirectoryPath = assetDirectoryPath.Substring(0, assetDirectoryPath.LastIndexOf("\\"));
-            int dotInd = fileName.IndexOf(".");
-            if (dotInd == -1) {
-                Debug.LogError("HOFileUtils.RenameAsset: fileName parameter is missing extension");
-                return;
-            }
-            string name = fileName.Substring(0, dotInd);
-            string extension = fileName.Substring(dotInd);
-            string newAssetPath = assetDirectoryPath + "\\" + fileName;
+            string assetOriginalPath = ADBPathToFullPath(assetADBPath);
+            string assetDirectoryPath = assetOriginalPath.Substring(0, assetOriginalPath.LastIndexOf("\\"));
+            string extension = assetADBPath.Substring(assetADBPath.LastIndexOf("."));
+            string newValidName = newName;
+            string newAssetPath = assetDirectoryPath + "\\" + newValidName + extension;
             int num = 0;
-            while (File.Exists(newAssetPath)) {
-                fileName = name + " " + (++num) + extension;
-                newAssetPath = assetDirectoryPath + "\\" + fileName;
+            while (File.Exists(newAssetPath) && newAssetPath != assetOriginalPath) {
+                newValidName = newName + " " + (++num);
+                newAssetPath = assetDirectoryPath + "\\" + newValidName + extension;
             }
-            string res = AssetDatabase.RenameAsset(assetADBPath, fileName);
+            string res = AssetDatabase.RenameAsset(assetADBPath, newValidName);
             if (res != "") Debug.LogError(res);
         }
     }
