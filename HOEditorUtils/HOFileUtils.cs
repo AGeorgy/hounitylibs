@@ -7,6 +7,7 @@ using System.IO;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Holoville.HOEditorUtils
 {
@@ -99,6 +100,34 @@ namespace Holoville.HOEditorUtils
             adbAssemblyPath = adbAssemblyPath.Replace("\\", "/");
             adbAssemblyPath = adbAssemblyPath.Substring(projectPath.Length + 1);
             return adbAssemblyPath.Substring(0, adbAssemblyPath.LastIndexOf("/"));
+        }
+
+        /// <summary>
+        /// Returns a new prefab path based on the given name,
+        /// so that it can be used to create new prefabs in the project window.
+        /// </summary>
+        static public string GetNewPrefabPath(string name)
+        {
+            Object selectedObj = Selection.activeObject;
+            string assetPath = AssetDatabase.GetAssetPath(selectedObj);
+            string prefabDirectoryPath;
+            if (assetPath.Length > 0) {
+                prefabDirectoryPath = ADBPathToFullPath(assetPath);
+                if ((File.GetAttributes(prefabDirectoryPath) & FileAttributes.Directory) != FileAttributes.Directory) {
+                    prefabDirectoryPath = prefabDirectoryPath.Substring(0, prefabDirectoryPath.LastIndexOf("\\"));
+                }
+            } else {
+                prefabDirectoryPath = assetsPath;
+            }
+            // Set correct filename
+            const string suffix = ".prefab";
+            string prefabPath = prefabDirectoryPath + "\\" + name + suffix;
+            int num = 0;
+            while (File.Exists(prefabPath)) {
+                prefabPath = prefabDirectoryPath + "\\" + name + " " + (++num) + suffix;
+            }
+
+            return FullPathToADBPath(prefabPath);
         }
     }
 }

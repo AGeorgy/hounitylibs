@@ -42,6 +42,12 @@
             <param name="target">Target whose assembly path to return</param>
             <returns></returns>
         </member>
+        <member name="M:Holoville.HOEditorUtils.HOFileUtils.GetNewPrefabPath(System.String)">
+            <summary>
+            Returns a new prefab path based on the given name,
+            so that it can be used to create new prefabs in the project window.
+            </summary>
+        </member>
         <member name="P:Holoville.HOEditorUtils.HOFileUtils.projectPath">
             <summary>
             Full path to project directory, with backwards (\) slashes.
