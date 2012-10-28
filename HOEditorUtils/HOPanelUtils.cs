@@ -15,13 +15,18 @@ namespace Holoville.HOEditorUtils
         /// <summary>
         /// Connects to a <see cref="ScriptableObject"/> asset.
         /// If the asset already exists at the given path, loads it and returns it.
-        /// Otherwise, automatically creates it before loading and returning it.
+        /// Otherwise, either returns NULL or automatically creates it before loading and returning it
+        /// (depending on the passed parameters).
         /// </summary>
         /// <typeparam name="T">Asset type</typeparam>
         /// <param name="adbFilePath">File path (relative to Unity's project folder)</param>
-        public static T ConnectToSourceAsset<T>(string adbFilePath) where T : ScriptableObject
+        /// <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
+        public static T ConnectToSourceAsset<T>(string adbFilePath, bool createIfMissing = false) where T : ScriptableObject
         {
-            if (!HOFileUtils.AssetExists(adbFilePath)) CreateScriptableAsset<T>(adbFilePath);
+            if (!HOFileUtils.AssetExists(adbFilePath)) {
+                if (createIfMissing) CreateScriptableAsset<T>(adbFilePath);
+                else return null;
+            }
             T source = (T)Resources.LoadAssetAtPath(adbFilePath, typeof (T));
             if (source == null) {
                 // Source changed (or editor file was moved from outside of Unity): overwrite it

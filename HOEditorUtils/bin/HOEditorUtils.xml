@@ -91,14 +91,16 @@
             Utils for editor panels (of type <see cref="T:UnityEditor.Editor"/> or <see cref="T:UnityEditor.EditorWindow"/>).
             </summary>
         </member>
-        <member name="M:Holoville.HOEditorUtils.HOPanelUtils.ConnectToSourceAsset``1(System.String)">
+        <member name="M:Holoville.HOEditorUtils.HOPanelUtils.ConnectToSourceAsset``1(System.String,System.Boolean)">
             <summary>
             Connects to a <see cref="T:UnityEngine.ScriptableObject"/> asset.
             If the asset already exists at the given path, loads it and returns it.
-            Otherwise, automatically creates it before loading and returning it.
+            Otherwise, either returns NULL or automatically creates it before loading and returning it
+            (depending on the passed parameters).
             </summary>
             <typeparam name="T">Asset type</typeparam>
             <param name="adbFilePath">File path (relative to Unity's project folder)</param>
+            <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
         </member>
     </members>
 </doc>
