@@ -90,16 +90,34 @@ namespace Holoville.HOEditorUtils
         /// to the assembly that contains the given target.
         /// </summary>
         /// <param name="target">Target whose assembly path to return</param>
-        /// <returns></returns>
         public static string GetAssemblyADBPath(object target)
+        { return GetAssemblyADBPath(target.GetType().Assembly); }
+        /// <summary>
+        /// Returns the path (in AssetDatabase format: "/" slashes and no final slash)
+        /// of the given assembly.
+        /// </summary>
+        /// <param name="assembly">Assembly whose path to return</param>
+        public static string GetAssemblyADBPath(Assembly assembly)
         {
-//            UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
-            UriBuilder uri = new UriBuilder(target.GetType().Assembly.CodeBase);
+            return FullPathToADBPath(GetAssemblyPath(assembly));
+        }
+
+        /// <summary>
+        /// Returns the full path ("//" slashes and no final slash)
+        /// to the assembly that contains the given target.
+        /// </summary>
+        /// <param name="target">Target whose assembly path to return</param>
+        public static string GetAssemblyPath(object target)
+        { return GetAssemblyPath(target.GetType().Assembly); }
+        /// <summary>
+        /// Returns the full path ("//" slashes and no final slash) of the given assembly.
+        /// </summary>
+        /// <param name="assembly">Assembly whose path to return</param>
+        public static string GetAssemblyPath(Assembly assembly)
+        {
+            UriBuilder uri = new UriBuilder(assembly.CodeBase);
             string path = Uri.UnescapeDataString(uri.Path);
-            string adbAssemblyPath = Path.GetDirectoryName(path);
-            adbAssemblyPath = adbAssemblyPath.Replace("\\", "/");
-            adbAssemblyPath = adbAssemblyPath.Substring(projectPath.Length + 1);
-            return adbAssemblyPath.Substring(0, adbAssemblyPath.LastIndexOf("/"));
+            return Path.GetDirectoryName(path);
         }
 
         /// <summary>
