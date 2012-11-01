@@ -20,6 +20,22 @@
             Data used while dragging a GUI element.
             </summary>
         </member>
+        <member name="T:Holoville.HOEditorGUIFramework.Core.GUISelectData">
+            <summary>
+            Data used for selection of GUI elements.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOEditorGUIFramework.Core.GUISelectData.IsStoredList(System.Collections.IList)">
+            <summary>
+            Checks if the given list is the same as the copied one.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOEditorGUIFramework.Core.GUISelectData.CheckFirstSelectedItem(Holoville.HOEditorGUIFramework.Core.GUISelectData.ItemData)">
+            <summary>
+            If this item is the only one selected, sets it as the first
+            (useful when selecting multiple objects while pressing SHIFT).
+            </summary>
+        </member>
         <member name="T:Holoville.HOEditorGUIFramework.HOGUIStyle">
             <summary>
             Collection of various GUIStyles.
@@ -224,6 +240,60 @@
             <summary>
             Clones the given style and changes its font color.
             </summary>
+        </member>
+        <member name="T:Holoville.HOEditorGUIFramework.HOGUISelect">
+            <summary>
+            Manages selection of multiple GUI elements.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.SetState(System.Boolean,UnityEditor.Editor,System.Collections.IList,System.Int32)">
+            <summary>
+            Call this after each selectable GUI block, to calculate and draw the current selection state.
+            Return TRUE while the item at the given index is selected.
+            </summary>
+            <param name="selectOnClick">If TRUE selects on click, otherwise on press</param>
+            <param name="editor">Reference to the panel calling this method (used for Repaint purposes)</param>
+            <param name="selectableList">List containig the selectable items</param>
+            <param name="selectionItemIndex">Index of the last selectable item block drawn</param>
+        </member>
+        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.SetState(System.Boolean,UnityEditor.Editor,System.Collections.IList,System.Int32,UnityEngine.Color)">
+            <summary>
+            Call this after each selectable GUI block, to calculate and draw the current selection state.
+            Return TRUE while the item at the given index is selected.
+            </summary>
+            <param name="selectOnClick">If TRUE selects on click, otherwise on press</param>
+            <param name="editor">Reference to the panel calling this method (used for Repaint purposes)</param>
+            <param name="selectableList">List containig the selectable items</param>
+            <param name="selectionItemIndex">Index of the last selectable item block drawn</param>
+            <param name="selectionColor">Color to apply when selecting</param>
+        </member>
+        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.SetState(System.Boolean,UnityEditor.EditorWindow,System.Collections.IList,System.Int32)">
+            <summary>
+            Call this after each selectable GUI block, to calculate and draw the current selection state.
+            Return TRUE while the item at the given index is selected.
+            </summary>
+            <param name="selectOnClick">If TRUE selects on click, otherwise on press</param>
+            <param name="editorWindow">Reference to the panel calling this method (used for Repaint purposes)</param>
+            <param name="selectableList">List containig the selectable items</param>
+            <param name="selectionItemIndex">Index of the last selectable item block drawn</param>
+        </member>
+        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.SetState(System.Boolean,UnityEditor.EditorWindow,System.Collections.IList,System.Int32,UnityEngine.Color)">
+            <summary>
+            Call this after each selectable GUI block, to calculate and draw the current selection state.
+            Return TRUE while the item at the given index is selected.
+            </summary>
+            <param name="selectOnClick">If TRUE selects on click, otherwise on press</param>
+            <param name="editorWindow">Reference to the panel calling this method (used for Repaint purposes)</param>
+            <param name="selectableList">List containig the selectable items</param>
+            <param name="selectionItemIndex">Index of the last selectable item block drawn</param>
+            <param name="selectionColor">Color to apply when selecting</param>
+        </member>
+        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.GetSelectedIndexes">
+            <summary>
+            Returns the currently selected indexes in the selection list,
+            or an empty list if none is selected.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Holoville.HOEditorGUIFramework.HOGUILayout">
             <summary>
@@ -558,12 +628,22 @@
             <param name="draggedItemIndex">DraggableList index of the item being dragged</param>
             <param name="optionalData">Optional data that can be retrieved via the <see cref="P:Holoville.HOEditorGUIFramework.HOGUIDrag.optionalDragData"/> static property</param>
         </member>
-        <member name="M:Holoville.HOEditorGUIFramework.HOGUIDrag.Drag(System.Int32,UnityEngine.Color)">
+        <member name="M:Holoville.HOEditorGUIFramework.HOGUIDrag.Drag(System.Collections.IList,System.Int32)">
             <summary>
             Call this after each draggable GUI block, to calculate and draw the current drag state
             (or complete it if the mouse was released).
             Returns TRUE if the drag operation was concluded and accepted.
             </summary>
+            <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
+            <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
+        </member>
+        <member name="M:Holoville.HOEditorGUIFramework.HOGUIDrag.Drag(System.Collections.IList,System.Int32,UnityEngine.Color)">
+            <summary>
+            Call this after each draggable GUI block, to calculate and draw the current drag state
+            (or complete it if the mouse was released).
+            Returns TRUE if the drag operation was concluded and accepted.
+            </summary>
+            <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
             <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
             <param name="dragEvidenceColor">Color to use for drag divider and selection</param>
         </member>

@@ -50,10 +50,12 @@
   <ItemGroup>
     <Compile Include="Core\Delegates.cs" />
     <Compile Include="Core\GUIDragData.cs" />
+    <Compile Include="Core\GUISelectData.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="HOGUI.cs" />
     <Compile Include="HOGUIDrag.cs" />
     <Compile Include="HOGUILayout.cs" />
+    <Compile Include="HOGUISelect.cs" />
     <Compile Include="HOGUIStyle.cs" />
     <Compile Include="Core\HOGUITexture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

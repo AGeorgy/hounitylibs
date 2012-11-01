@@ -32,13 +32,16 @@ namespace Holoville.HOEditorGUIFramework
         /// </summary>
         static public object optionalDragData { get { if (_dragData == null) return null; return _dragData.optionalData; } }
 
+        // Default drag color
+        static readonly Color _DefDragColor = new Color(0.1720873f, 0.4236527f, 0.7686567f, 0.35f);
+
         static GUIDragData _dragData;
         static bool _waitingToApplyDrag;
         static Editor _editor;
         static EditorWindow _editorWindow;
 
         // ===================================================================================
-        // METHODS ---------------------------------------------------------------------------
+        // PUBLIC METHODS --------------------------------------------------------------------
 
         /// <summary>
         /// Starts a drag operation on a GUI element.
@@ -78,11 +81,22 @@ namespace Holoville.HOEditorGUIFramework
         /// (or complete it if the mouse was released).
         /// Returns TRUE if the drag operation was concluded and accepted.
         /// </summary>
+        /// <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
+        /// <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
+        static public bool Drag(IList draggableList, int currDraggableItemIndex)
+        { return Drag(draggableList, currDraggableItemIndex, _DefDragColor); }
+
+        /// <summary>
+        /// Call this after each draggable GUI block, to calculate and draw the current drag state
+        /// (or complete it if the mouse was released).
+        /// Returns TRUE if the drag operation was concluded and accepted.
+        /// </summary>
+        /// <param name="draggableList">List containing the draggable item and all other relative draggable items</param>
         /// <param name="currDraggableItemIndex">Current index of the draggable item being drawn</param>
         /// <param name="dragEvidenceColor">Color to use for drag divider and selection</param>
-        static public bool Drag(int currDraggableItemIndex, Color dragEvidenceColor)
+        static public bool Drag(IList draggableList, int currDraggableItemIndex, Color dragEvidenceColor)
         {
-            if (_dragData == null) return false;
+            if (_dragData == null || _dragData.draggableList != draggableList) return false;
             if (_waitingToApplyDrag) {
                 if (Event.current.type == EventType.Repaint) Event.current.Use();
                 if (Event.current.type == EventType.Used) ApplyDrag();
@@ -109,7 +123,7 @@ namespace Holoville.HOEditorGUIFramework
             if (_dragData.draggedItemIndex == currDraggableItemIndex) {
                 // Evidence dragged pool
                 Color selectionColor = dragEvidenceColor;
-                selectionColor.a = 0.4f;
+                selectionColor.a = 0.35f;
                 HOGUI.FlatDivider(GUILayoutUtility.GetLastRect(), selectionColor);
             }
 
