@@ -20,6 +20,8 @@ namespace Holoville.HOEditorGUIFramework
 
         static Color _selectionColor;
         static GUISelectData _selectData;
+        static Editor _editor;
+        static EditorWindow _editorWindow;
 
         // ===================================================================================
         // PUBLIC METHODS --------------------------------------------------------------------
@@ -28,47 +30,45 @@ namespace Holoville.HOEditorGUIFramework
         /// Call this after each selectable GUI block, to calculate and draw the current selection state.
         /// Return TRUE while the item at the given index is selected.
         /// </summary>
-        /// <param name="selectOnClick">If TRUE selects on click, otherwise on press</param>
         /// <param name="editor">Reference to the panel calling this method (used for Repaint purposes)</param>
         /// <param name="selectableList">List containig the selectable items</param>
         /// <param name="selectionItemIndex">Index of the last selectable item block drawn</param>
-        public static bool SetState(bool selectOnClick, Editor editor, IList selectableList, int selectionItemIndex)
-        { return SetState(selectOnClick, editor, null, selectableList, selectionItemIndex, _DefSelectionColor); }
+        public static bool SetState(Editor editor, IList selectableList, int selectionItemIndex)
+        { return SetState(editor, null, selectableList, selectionItemIndex, _DefSelectionColor); }
         /// <summary>
         /// Call this after each selectable GUI block, to calculate and draw the current selection state.
         /// Return TRUE while the item at the given index is selected.
         /// </summary>
-        /// <param name="selectOnClick">If TRUE selects on click, otherwise on press</param>
         /// <param name="editor">Reference to the panel calling this method (used for Repaint purposes)</param>
         /// <param name="selectableList">List containig the selectable items</param>
         /// <param name="selectionItemIndex">Index of the last selectable item block drawn</param>
         /// <param name="selectionColor">Color to apply when selecting</param>
-        public static bool SetState(bool selectOnClick, Editor editor, IList selectableList, int selectionItemIndex, Color selectionColor)
-        { return SetState(selectOnClick, editor, null, selectableList, selectionItemIndex, selectionColor); }
+        public static bool SetState(Editor editor, IList selectableList, int selectionItemIndex, Color selectionColor)
+        { return SetState(editor, null, selectableList, selectionItemIndex, selectionColor); }
         /// <summary>
         /// Call this after each selectable GUI block, to calculate and draw the current selection state.
         /// Return TRUE while the item at the given index is selected.
         /// </summary>
-        /// <param name="selectOnClick">If TRUE selects on click, otherwise on press</param>
         /// <param name="editorWindow">Reference to the panel calling this method (used for Repaint purposes)</param>
         /// <param name="selectableList">List containig the selectable items</param>
         /// <param name="selectionItemIndex">Index of the last selectable item block drawn</param>
-        public static bool SetState(bool selectOnClick, EditorWindow editorWindow, IList selectableList, int selectionItemIndex)
-        { return SetState(selectOnClick, null, editorWindow, selectableList, selectionItemIndex, _DefSelectionColor); }
+        public static bool SetState(EditorWindow editorWindow, IList selectableList, int selectionItemIndex)
+        { return SetState(null, editorWindow, selectableList, selectionItemIndex, _DefSelectionColor); }
         /// <summary>
         /// Call this after each selectable GUI block, to calculate and draw the current selection state.
         /// Return TRUE while the item at the given index is selected.
         /// </summary>
-        /// <param name="selectOnClick">If TRUE selects on click, otherwise on press</param>
         /// <param name="editorWindow">Reference to the panel calling this method (used for Repaint purposes)</param>
         /// <param name="selectableList">List containig the selectable items</param>
         /// <param name="selectionItemIndex">Index of the last selectable item block drawn</param>
         /// <param name="selectionColor">Color to apply when selecting</param>
-        public static bool SetState(bool selectOnClick, EditorWindow editorWindow, IList selectableList, int selectionItemIndex, Color selectionColor)
-        { return SetState(selectOnClick, null, editorWindow, selectableList, selectionItemIndex, selectionColor); }
+        public static bool SetState(EditorWindow editorWindow, IList selectableList, int selectionItemIndex, Color selectionColor)
+        { return SetState(null, editorWindow, selectableList, selectionItemIndex, selectionColor); }
 
-        static bool SetState(bool selectOnClick, Editor editor, EditorWindow editorWindow, IList selectableList, int selectionItemIndex, Color selectionColor)
+        static bool SetState(Editor editor, EditorWindow editorWindow, IList selectableList, int selectionItemIndex, Color selectionColor)
         {
+            if (editor != null) _editor = editor;
+            else _editorWindow = editorWindow;
             _selectionColor = selectionColor;
             _selectionColor.a = 0.35f;
             if (_selectData == null || !_selectData.IsStoredList(selectableList)) _selectData = new GUISelectData(selectableList);
@@ -79,9 +79,17 @@ namespace Holoville.HOEditorGUIFramework
             bool selectionStatusChanged = false;
             if (Event.current.type == EventType.MouseDown) {
                 itemData.isPressed = itemData.rect.Contains(Event.current.mousePosition);
-                if (!selectOnClick && wasPressed != itemData.isPressed) selectionStatusChanged = true;
-            } else if (Event.current.type == EventType.MouseUp) {
-                if (selectOnClick && itemData.rect.Contains(Event.current.mousePosition)) selectionStatusChanged = itemData.isPressed;
+                if (wasPressed != itemData.isPressed && !itemData.selected) {
+                    selectionStatusChanged = true;
+                    if (!itemData.selected) itemData.canBeDeselected = false;
+                }
+            } else if (Event.current.type == EventType.MouseUp || Event.current.type == EventType.Used) {
+                if (!itemData.canBeDeselected) itemData.canBeDeselected = true;
+                else if (itemData.isPressed && itemData.selected && itemData.rect.Contains(Event.current.mousePosition)) selectionStatusChanged = true;
+                else if (itemData.selected && !Event.current.shift && !Event.current.control && !itemData.rect.Contains(Event.current.mousePosition)) {
+                    itemData.selected = false;
+                    Repaint();
+                }
                 itemData.isPressed = false;
             }
 
@@ -94,8 +102,7 @@ namespace Holoville.HOEditorGUIFramework
                     DeselectAll(itemData.selected ? itemData : null);
                     _selectData.CheckFirstSelectedItem(itemData);
                 }
-                if (editor != null) editor.Repaint();
-                else editorWindow.Repaint();
+                Repaint();
             }
 
             if (itemData.selected) {
@@ -147,6 +154,12 @@ namespace Holoville.HOEditorGUIFramework
                 GUISelectData.ItemData itemData = _selectData.selectableItemsDatas[i];
                 itemData.selected = itemData.index >= rangeStart.index && itemData.index <= rangeEnd.index;
             }
+        }
+
+        static void Repaint()
+        {
+            if (_editor != null) _editor.Repaint();
+            else _editorWindow.Repaint();
         }
     }
 }

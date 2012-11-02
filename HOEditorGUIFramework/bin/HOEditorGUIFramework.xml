@@ -246,43 +246,39 @@
             Manages selection of multiple GUI elements.
             </summary>
         </member>
-        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.SetState(System.Boolean,UnityEditor.Editor,System.Collections.IList,System.Int32)">
+        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.SetState(UnityEditor.Editor,System.Collections.IList,System.Int32)">
             <summary>
             Call this after each selectable GUI block, to calculate and draw the current selection state.
             Return TRUE while the item at the given index is selected.
             </summary>
-            <param name="selectOnClick">If TRUE selects on click, otherwise on press</param>
             <param name="editor">Reference to the panel calling this method (used for Repaint purposes)</param>
             <param name="selectableList">List containig the selectable items</param>
             <param name="selectionItemIndex">Index of the last selectable item block drawn</param>
         </member>
-        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.SetState(System.Boolean,UnityEditor.Editor,System.Collections.IList,System.Int32,UnityEngine.Color)">
+        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.SetState(UnityEditor.Editor,System.Collections.IList,System.Int32,UnityEngine.Color)">
             <summary>
             Call this after each selectable GUI block, to calculate and draw the current selection state.
             Return TRUE while the item at the given index is selected.
             </summary>
-            <param name="selectOnClick">If TRUE selects on click, otherwise on press</param>
             <param name="editor">Reference to the panel calling this method (used for Repaint purposes)</param>
             <param name="selectableList">List containig the selectable items</param>
             <param name="selectionItemIndex">Index of the last selectable item block drawn</param>
             <param name="selectionColor">Color to apply when selecting</param>
         </member>
-        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.SetState(System.Boolean,UnityEditor.EditorWindow,System.Collections.IList,System.Int32)">
+        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.SetState(UnityEditor.EditorWindow,System.Collections.IList,System.Int32)">
             <summary>
             Call this after each selectable GUI block, to calculate and draw the current selection state.
             Return TRUE while the item at the given index is selected.
             </summary>
-            <param name="selectOnClick">If TRUE selects on click, otherwise on press</param>
             <param name="editorWindow">Reference to the panel calling this method (used for Repaint purposes)</param>
             <param name="selectableList">List containig the selectable items</param>
             <param name="selectionItemIndex">Index of the last selectable item block drawn</param>
         </member>
-        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.SetState(System.Boolean,UnityEditor.EditorWindow,System.Collections.IList,System.Int32,UnityEngine.Color)">
+        <member name="M:Holoville.HOEditorGUIFramework.HOGUISelect.SetState(UnityEditor.EditorWindow,System.Collections.IList,System.Int32,UnityEngine.Color)">
             <summary>
             Call this after each selectable GUI block, to calculate and draw the current selection state.
             Return TRUE while the item at the given index is selected.
             </summary>
-            <param name="selectOnClick">If TRUE selects on click, otherwise on press</param>
             <param name="editorWindow">Reference to the panel calling this method (used for Repaint purposes)</param>
             <param name="selectableList">List containig the selectable items</param>
             <param name="selectionItemIndex">Index of the last selectable item block drawn</param>

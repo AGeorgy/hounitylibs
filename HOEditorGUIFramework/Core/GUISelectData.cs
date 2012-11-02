@@ -72,6 +72,7 @@ namespace Holoville.HOEditorGUIFramework.Core
             public int index;
             public Rect rect;
             public bool isPressed;
+            public bool canBeDeselected;
             public bool selected;
 
             public ItemData(int index)
