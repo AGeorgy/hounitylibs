@@ -55,6 +55,7 @@ namespace Holoville.HOEditorGUIFramework
                                menubarTitleBold,
                                menubarButton,
                                menubarIconButton,
+                               emptyBox,
                                miniBox,
                                blankBox,
                                rowBox,
@@ -182,6 +183,8 @@ namespace Holoville.HOEditorGUIFramework
             miniRowBox = new GUIStyle(rowBox) { font = EditorStyles.miniFont };
             blankBox = new GUIStyle(GUI.skin.box) { margin = new RectOffset(0, 0, 0, 0), padding = new RectOffset(0, 0, 0, 0) };
             blankBox.SetBackground(EditorGUIUtility.whiteTexture);
+            emptyBox = new GUIStyle(blankBox);
+            emptyBox.SetBackground(null);
             subpanelBox = new GUIStyle(blankBox) { padding = new RectOffset(6, 6, 10, 6) };
             dividerBox = new GUIStyle(EditorStyles.toolbar) { margin = new RectOffset(0, 0, 0, 0), padding = new RectOffset(0, 0, 0, 0), fixedHeight = 1 };
             flatDividerBox = new GUIStyle(blankBox) { fixedHeight = 1 };

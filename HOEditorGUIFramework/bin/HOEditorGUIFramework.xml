@@ -201,6 +201,11 @@
             Editor-style skinned element.
             </summary>
         </member>
+        <member name="F:Holoville.HOEditorGUIFramework.HOGUIStyle.emptyBox">
+            <summary>
+            Editor-style skinned element.
+            </summary>
+        </member>
         <member name="F:Holoville.HOEditorGUIFramework.HOGUIStyle.miniBox">
             <summary>
             Editor-style skinned element.
