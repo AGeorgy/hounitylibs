@@ -45,7 +45,7 @@ namespace Holoville.HOEditorUtils
 
         /// <summary>
         /// Sets the icon and title of an editor window.
-        /// Call this at the beginning of every onGUI call.
+        /// Call this at the beginning of every OnGUI call.
         /// </summary>
         /// <param name="editor">Reference to the editor panel whose icon to set</param>
         /// <param name="icon">Icon to apply</param>
