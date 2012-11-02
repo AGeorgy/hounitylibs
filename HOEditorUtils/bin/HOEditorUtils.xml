@@ -184,11 +184,20 @@
             Connects to a <see cref="T:UnityEngine.ScriptableObject"/> asset.
             If the asset already exists at the given path, loads it and returns it.
             Otherwise, either returns NULL or automatically creates it before loading and returning it
-            (depending on the passed parameters).
+            (depending on the given parameters).
             </summary>
             <typeparam name="T">Asset type</typeparam>
             <param name="adbFilePath">File path (relative to Unity's project folder)</param>
             <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
+        </member>
+        <member name="M:Holoville.HOEditorUtils.HOPanelUtils.SetWindowTitle(UnityEditor.EditorWindow,UnityEngine.Texture,System.String)">
+            <summary>
+            Sets the icon and title of an editor window.
+            Call this at the beginning of every onGUI call.
+            </summary>
+            <param name="editor">Reference to the editor panel whose icon to set</param>
+            <param name="icon">Icon to apply</param>
+            <param name="title">Title</param>
         </member>
     </members>
 </doc>

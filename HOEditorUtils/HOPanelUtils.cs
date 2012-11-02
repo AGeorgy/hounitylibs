@@ -2,6 +2,8 @@
 // Copyright (c) 2012 Daniele Giardini - Holoville - http://www.holoville.com
 // Created: 2012/09/26 12:25
 
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,11 +14,16 @@ namespace Holoville.HOEditorUtils
     /// </summary>
     public class HOPanelUtils
     {
+        static Dictionary<EditorWindow, GUIContent> _winTitleContentByEditor;
+
+        // ===================================================================================
+        // PUBLIC METHODS --------------------------------------------------------------------
+
         /// <summary>
         /// Connects to a <see cref="ScriptableObject"/> asset.
         /// If the asset already exists at the given path, loads it and returns it.
         /// Otherwise, either returns NULL or automatically creates it before loading and returning it
-        /// (depending on the passed parameters).
+        /// (depending on the given parameters).
         /// </summary>
         /// <typeparam name="T">Asset type</typeparam>
         /// <param name="adbFilePath">File path (relative to Unity's project folder)</param>
@@ -36,6 +43,32 @@ namespace Holoville.HOEditorUtils
             return source;
         }
 
+        /// <summary>
+        /// Sets the icon and title of an editor window.
+        /// Call this at the beginning of every onGUI call.
+        /// </summary>
+        /// <param name="editor">Reference to the editor panel whose icon to set</param>
+        /// <param name="icon">Icon to apply</param>
+        /// <param name="title">Title</param>
+        public static void SetWindowTitle(EditorWindow editor, Texture icon, string title)
+        {
+            GUIContent titleContent;
+            if (_winTitleContentByEditor == null) _winTitleContentByEditor = new Dictionary<EditorWindow, GUIContent>();
+            if (_winTitleContentByEditor.ContainsKey(editor)) {
+                titleContent = _winTitleContentByEditor[editor];
+                if (titleContent != null) {
+                    titleContent.image = icon;
+                    return;
+                }
+                _winTitleContentByEditor.Remove(editor);
+            }
+            titleContent = GetWinTitleContent(editor);
+            if (titleContent != null) {
+                titleContent.image = icon;
+                _winTitleContentByEditor.Add(editor, titleContent);
+            }
+        }
+
         // ===================================================================================
         // METHODS ---------------------------------------------------------------------------
 
@@ -43,6 +76,14 @@ namespace Holoville.HOEditorUtils
         {
             T data = ScriptableObject.CreateInstance<T>();
             AssetDatabase.CreateAsset(data, adbFilePath);
+        }
+
+        static GUIContent GetWinTitleContent(EditorWindow editor)
+        {
+            const BindingFlags bFlags = BindingFlags.Instance | BindingFlags.NonPublic;
+            PropertyInfo p = typeof(EditorWindow).GetProperty("cachedTitleContent", bFlags);
+            if (p == null) return null;
+            return p.GetValue(editor, null) as GUIContent;
         }
     }
 }
