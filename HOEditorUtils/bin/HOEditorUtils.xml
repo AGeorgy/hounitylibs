@@ -115,6 +115,42 @@
             Based on RodGreen's method (http://forum.unity3d.com/threads/82883-Breaking-connection-from-gameObject-to-prefab-for-good.?p=726602&amp;viewfull=1#post726602)
             </summary>
         </member>
+        <member name="T:Holoville.HOEditorUtils.HOTextureUtils">
+            <summary>
+            Various texture utils.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOEditorUtils.HOTextureUtils.SetImportSettings(UnityEngine.Texture,Holoville.HOEditorUtils.HOTextureUtils.ImportSettings)">
+            <summary>
+            Sets the import settings of the given texture to some default values,
+            only if some of the settings doesn't already coincide.
+            </summary>
+            <param name="texture">Texture to set</param>
+            <param name="importSettings">Import settings</param>
+        </member>
+        <member name="M:Holoville.HOEditorUtils.HOTextureUtils.SetImportSettings(System.String,Holoville.HOEditorUtils.HOTextureUtils.ImportSettings)">
+            <summary>
+            Sets the import settings of the given texture to some default values,
+            only if some of the settings doesn't already coincide.
+            </summary>
+            <param name="textureADBPath">AssetDatabase path to the texture to set</param>
+            <param name="importSettings">Import settings</param>
+        </member>
+        <member name="T:Holoville.HOEditorUtils.HOTextureUtils.ImportSettings">
+            <summary>
+            Various import settings to be used with the SetImportSettings method.
+            </summary>
+        </member>
+        <member name="F:Holoville.HOEditorUtils.HOTextureUtils.ImportSettings.GUITexture">
+            <summary>
+            Sets this texture for use within a GUI texture.
+            </summary>
+        </member>
+        <member name="F:Holoville.HOEditorUtils.HOTextureUtils.ImportSettings.WindowTitleIcon">
+            <summary>
+            Sets texture for use with as a custom EditorWindow title icon.
+            </summary>
+        </member>
         <member name="T:Holoville.HOEditorUtils.HOMenuItemFileCreator">
             <summary>
             Creates and manages an external file used to create a menu item that will open an editor window.

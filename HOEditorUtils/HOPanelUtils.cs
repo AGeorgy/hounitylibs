@@ -58,6 +58,7 @@ namespace Holoville.HOEditorUtils
                 titleContent = _winTitleContentByEditor[editor];
                 if (titleContent != null) {
                     titleContent.image = icon;
+                    titleContent.text = title;
                     return;
                 }
                 _winTitleContentByEditor.Remove(editor);
@@ -65,6 +66,7 @@ namespace Holoville.HOEditorUtils
             titleContent = GetWinTitleContent(editor);
             if (titleContent != null) {
                 titleContent.image = icon;
+                titleContent.text = title;
                 _winTitleContentByEditor.Add(editor, titleContent);
             }
         }
