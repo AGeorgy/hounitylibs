@@ -15,10 +15,11 @@ namespace Holoville.HOEditorGUIFramework
     /// </summary>
     public static class HOGUISelect
     {
-        // Default selection color
+        // Default selection colors
         static readonly Color _DefSelectionColor = new Color(0.1720873f, 0.4236527f, 0.7686567f, 0.35f);
 
         static Color _selectionColor;
+        static Color _unfocusedSelectionColor;
         static GUISelectData _selectData;
         static Editor _editor;
         static EditorWindow _editorWindow;
@@ -71,19 +72,22 @@ namespace Holoville.HOEditorGUIFramework
             else _editorWindow = editorWindow;
             _selectionColor = selectionColor;
             _selectionColor.a = 0.35f;
+            _unfocusedSelectionColor = new Color(selectionColor.r, selectionColor.g, selectionColor.b, 0.15f);
             if (_selectData == null || !_selectData.IsStoredList(selectableList)) _selectData = new GUISelectData(selectableList);
+            
+            EventType eType = Event.current.type;
 
             GUISelectData.ItemData itemData = _selectData.selectableItemsDatas[selectionItemIndex];
-            if (Event.current.type == EventType.Repaint) itemData.rect = GUILayoutUtility.GetLastRect();
+            if (eType == EventType.Repaint) itemData.rect = GUILayoutUtility.GetLastRect();
             bool wasPressed = itemData.isPressed;
             bool selectionStatusChanged = false;
-            if (Event.current.type == EventType.MouseDown) {
+            if (eType == EventType.MouseDown) {
                 itemData.isPressed = itemData.rect.Contains(Event.current.mousePosition);
                 if (wasPressed != itemData.isPressed && !itemData.selected) {
                     selectionStatusChanged = true;
                     if (!itemData.selected) itemData.canBeDeselected = false;
                 }
-            } else if (Event.current.type == EventType.MouseUp || Event.current.type == EventType.Used) {
+            } else if (eType == EventType.MouseUp || eType == EventType.Used || eType == EventType.DragExited) {
                 if (!itemData.canBeDeselected) itemData.canBeDeselected = true;
                 else if (itemData.isPressed && itemData.selected && itemData.rect.Contains(Event.current.mousePosition)) selectionStatusChanged = true;
                 else if (itemData.selected && !Event.current.shift && !Event.current.control && !itemData.rect.Contains(Event.current.mousePosition)) {
@@ -106,7 +110,7 @@ namespace Holoville.HOEditorGUIFramework
             }
 
             if (itemData.selected) {
-                HOGUI.FlatDivider(itemData.rect, _selectionColor);
+                HOGUI.FlatDivider(itemData.rect, IsFocusedPanel() ? _selectionColor : _unfocusedSelectionColor);
                 return true;
             }
             return false;
@@ -154,6 +158,12 @@ namespace Holoville.HOEditorGUIFramework
                 GUISelectData.ItemData itemData = _selectData.selectableItemsDatas[i];
                 itemData.selected = itemData.index >= rangeStart.index && itemData.index <= rangeEnd.index;
             }
+        }
+
+        static bool IsFocusedPanel()
+        {
+            if (_editorWindow == null) return true;
+            return EditorWindow.focusedWindow == _editorWindow;
         }
 
         static void Repaint()

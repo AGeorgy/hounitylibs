@@ -120,7 +120,7 @@
             Various texture utils.
             </summary>
         </member>
-        <member name="M:Holoville.HOEditorUtils.HOTextureUtils.SetImportSettings(UnityEngine.Texture,Holoville.HOEditorUtils.HOTextureUtils.ImportSettings)">
+        <member name="M:Holoville.HOEditorUtils.HOTextureUtils.SetImportSettings(UnityEngine.Texture,Holoville.HOEditorUtils.HOTextureUtils.TextureImportSettings)">
             <summary>
             Sets the import settings of the given texture to some default values,
             only if some of the settings doesn't already coincide.
@@ -128,7 +128,7 @@
             <param name="texture">Texture to set</param>
             <param name="importSettings">Import settings</param>
         </member>
-        <member name="M:Holoville.HOEditorUtils.HOTextureUtils.SetImportSettings(System.String,Holoville.HOEditorUtils.HOTextureUtils.ImportSettings)">
+        <member name="M:Holoville.HOEditorUtils.HOTextureUtils.SetImportSettings(System.String,Holoville.HOEditorUtils.HOTextureUtils.TextureImportSettings)">
             <summary>
             Sets the import settings of the given texture to some default values,
             only if some of the settings doesn't already coincide.
@@ -136,19 +136,19 @@
             <param name="textureADBPath">AssetDatabase path to the texture to set</param>
             <param name="importSettings">Import settings</param>
         </member>
-        <member name="T:Holoville.HOEditorUtils.HOTextureUtils.ImportSettings">
+        <member name="T:Holoville.HOEditorUtils.HOTextureUtils.TextureImportSettings">
             <summary>
             Various import settings to be used with the SetImportSettings method.
             </summary>
         </member>
-        <member name="F:Holoville.HOEditorUtils.HOTextureUtils.ImportSettings.GUITexture">
+        <member name="F:Holoville.HOEditorUtils.HOTextureUtils.TextureImportSettings.GUITexture">
             <summary>
             Sets this texture for use within a GUI texture.
             </summary>
         </member>
-        <member name="F:Holoville.HOEditorUtils.HOTextureUtils.ImportSettings.WindowTitleIcon">
+        <member name="F:Holoville.HOEditorUtils.HOTextureUtils.TextureImportSettings.WindowIcon">
             <summary>
-            Sets texture for use with as a custom EditorWindow title icon.
+            Sets texture for use with a custom EditorWindow title icon.
             </summary>
         </member>
         <member name="T:Holoville.HOEditorUtils.HOMenuItemFileCreator">
@@ -226,14 +226,30 @@
             <param name="adbFilePath">File path (relative to Unity's project folder)</param>
             <param name="createIfMissing">If TRUE and the requested asset doesn't exist, forces its creation</param>
         </member>
+        <member name="M:Holoville.HOEditorUtils.HOPanelUtils.SetWindowTitle(UnityEditor.EditorWindow,UnityEngine.Texture)">
+            <summary>
+            Sets the icon of an editor window, without changing the title.
+            </summary>
+            <param name="editor">Reference to the editor panel whose icon to set</param>
+            <param name="icon">Icon to apply</param>
+        </member>
         <member name="M:Holoville.HOEditorUtils.HOPanelUtils.SetWindowTitle(UnityEditor.EditorWindow,UnityEngine.Texture,System.String)">
             <summary>
             Sets the icon and title of an editor window.
-            Call this at the beginning of every OnGUI call.
             </summary>
             <param name="editor">Reference to the editor panel whose icon to set</param>
             <param name="icon">Icon to apply</param>
             <param name="title">Title</param>
+        </member>
+        <member name="T:Holoville.HOEditorUtils.HOGUIUtils">
+            <summary>
+            GUI utils.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOEditorUtils.HOGUIUtils.PanelContainsMouse">
+            <summary>
+            Returns TRUE if the mouse is within the currently focused inspector/window boundaries.
+            </summary>
         </member>
     </members>
 </doc>

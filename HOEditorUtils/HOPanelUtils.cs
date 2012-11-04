@@ -44,8 +44,14 @@ namespace Holoville.HOEditorUtils
         }
 
         /// <summary>
+        /// Sets the icon of an editor window, without changing the title.
+        /// </summary>
+        /// <param name="editor">Reference to the editor panel whose icon to set</param>
+        /// <param name="icon">Icon to apply</param>
+        public static void SetWindowTitle(EditorWindow editor, Texture icon)
+        { SetWindowTitle(editor, icon, null); }
+        /// <summary>
         /// Sets the icon and title of an editor window.
-        /// Call this at the beginning of every OnGUI call.
         /// </summary>
         /// <param name="editor">Reference to the editor panel whose icon to set</param>
         /// <param name="icon">Icon to apply</param>
@@ -57,16 +63,16 @@ namespace Holoville.HOEditorUtils
             if (_winTitleContentByEditor.ContainsKey(editor)) {
                 titleContent = _winTitleContentByEditor[editor];
                 if (titleContent != null) {
-                    titleContent.image = icon;
-                    titleContent.text = title;
+                    if (titleContent.image != icon) titleContent.image = icon;
+                    if (title != null && titleContent.text != title) titleContent.text = title;
                     return;
                 }
                 _winTitleContentByEditor.Remove(editor);
             }
             titleContent = GetWinTitleContent(editor);
             if (titleContent != null) {
-                titleContent.image = icon;
-                titleContent.text = title;
+                if (titleContent.image != icon) titleContent.image = icon;
+                if (title != null && titleContent.text != title) titleContent.text = title;
                 _winTitleContentByEditor.Add(editor, titleContent);
             }
         }
