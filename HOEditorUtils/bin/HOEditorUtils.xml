@@ -241,15 +241,5 @@
             <param name="icon">Icon to apply</param>
             <param name="title">Title</param>
         </member>
-        <member name="T:Holoville.HOEditorUtils.HOGUIUtils">
-            <summary>
-            GUI utils.
-            </summary>
-        </member>
-        <member name="M:Holoville.HOEditorUtils.HOGUIUtils.PanelContainsMouse">
-            <summary>
-            Returns TRUE if the mouse is within the currently focused inspector/window boundaries.
-            </summary>
-        </member>
     </members>
 </doc>

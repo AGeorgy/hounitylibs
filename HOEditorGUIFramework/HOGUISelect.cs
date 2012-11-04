@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Holoville.HOEditorGUIFramework.Core;
+using Holoville.HOEditorGUIFramework.Utils;
 using UnityEditor;
 using UnityEngine;
 
@@ -90,7 +91,7 @@ namespace Holoville.HOEditorGUIFramework
             } else if (eType == EventType.MouseUp || eType == EventType.Used || eType == EventType.DragExited) {
                 if (!itemData.canBeDeselected) itemData.canBeDeselected = true;
                 else if (itemData.isPressed && itemData.selected && itemData.rect.Contains(Event.current.mousePosition)) selectionStatusChanged = true;
-                else if (itemData.selected && !Event.current.shift && !Event.current.control && !itemData.rect.Contains(Event.current.mousePosition)) {
+                else if (HOGUIUtils.PanelContainsMouse() && itemData.selected && !Event.current.shift && !Event.current.control && !itemData.rect.Contains(Event.current.mousePosition)) {
                     itemData.selected = false;
                     Repaint();
                 }

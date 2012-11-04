@@ -45,7 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\OS.cs" />
-    <Compile Include="HOGUIUtils.cs" />
     <Compile Include="HOMenuItemFileCreator.cs" />
     <Compile Include="HOPanelUtils.cs" />
     <Compile Include="HOFileUtils.cs" />

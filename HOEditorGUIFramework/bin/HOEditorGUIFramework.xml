@@ -820,5 +820,15 @@
             <param name="position">Rectangle on the screen to use for the divider</param>
             <param name="color">Color of the divider</param>
         </member>
+        <member name="T:Holoville.HOEditorGUIFramework.Utils.HOGUIUtils">
+            <summary>
+            GUI utils.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOEditorGUIFramework.Utils.HOGUIUtils.PanelContainsMouse">
+            <summary>
+            Returns TRUE if the mouse is within the currently focused inspector/window boundaries.
+            </summary>
+        </member>
     </members>
 </doc>
