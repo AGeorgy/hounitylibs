@@ -2,6 +2,7 @@
 // Copyright (c) 2012 Daniele Giardini - Holoville - http://www.holoville.com
 // Created: 2012/11/01 12:56
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Holoville.HOEditorGUIFramework.Core;
@@ -77,6 +78,9 @@ namespace Holoville.HOEditorGUIFramework
             if (_selectData == null || !_selectData.IsStoredList(selectableList)) _selectData = new GUISelectData(selectableList);
             
             EventType eType = Event.current.type;
+
+            // Check if something was deleted from the list before continuing
+            if (selectionItemIndex == -1 || selectionItemIndex > _selectData.selectableItemsDatas.Count - 1) return false;
 
             GUISelectData.ItemData itemData = _selectData.selectableItemsDatas[selectionItemIndex];
             if (eType == EventType.Repaint) itemData.rect = GUILayoutUtility.GetLastRect();

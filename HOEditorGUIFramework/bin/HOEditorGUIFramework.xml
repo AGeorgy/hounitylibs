@@ -4,6 +4,16 @@
         <name>HOEditorGUIFramework</name>
     </assembly>
     <members>
+        <member name="T:Holoville.HOEditorGUIFramework.Utils.HOGUIUtils">
+            <summary>
+            GUI utils.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOEditorGUIFramework.Utils.HOGUIUtils.PanelContainsMouse">
+            <summary>
+            Returns TRUE if the mouse is within the currently focused inspector/window boundaries.
+            </summary>
+        </member>
         <member name="T:Holoville.HOEditorGUIFramework.Core.HOGUITexture">
             <summary>
             Contains various useful textures for GUI usage.
@@ -107,6 +117,16 @@
             </summary>
         </member>
         <member name="F:Holoville.HOEditorGUIFramework.HOGUIStyle.wordWrapMiniLabelBold">
+            <summary>
+            Editor-style skinned element.
+            </summary>
+        </member>
+        <member name="F:Holoville.HOEditorGUIFramework.HOGUIStyle.wordWrapCenteredMiniLabel">
+            <summary>
+            Editor-style skinned element.
+            </summary>
+        </member>
+        <member name="F:Holoville.HOEditorGUIFramework.HOGUIStyle.wordWrapCenteredMiniLabelBold">
             <summary>
             Editor-style skinned element.
             </summary>
@@ -819,16 +839,6 @@
             </summary>
             <param name="position">Rectangle on the screen to use for the divider</param>
             <param name="color">Color of the divider</param>
-        </member>
-        <member name="T:Holoville.HOEditorGUIFramework.Utils.HOGUIUtils">
-            <summary>
-            GUI utils.
-            </summary>
-        </member>
-        <member name="M:Holoville.HOEditorGUIFramework.Utils.HOGUIUtils.PanelContainsMouse">
-            <summary>
-            Returns TRUE if the mouse is within the currently focused inspector/window boundaries.
-            </summary>
         </member>
     </members>
 </doc>

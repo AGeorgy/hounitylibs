@@ -37,6 +37,8 @@ namespace Holoville.HOEditorGUIFramework
                                miniLabelBold,
                                wordWrapMiniLabel,
                                wordWrapMiniLabelBold,
+                               wordWrapCenteredMiniLabel,
+                               wordWrapCenteredMiniLabelBold,
                                prefixLabel,
                                button,
                                iconButton,
@@ -105,6 +107,8 @@ namespace Holoville.HOEditorGUIFramework
             miniLabelBold = new GUIStyle(miniLabel) { font = EditorStyles.miniBoldFont };
             wordWrapMiniLabel = new GUIStyle(EditorStyles.wordWrappedMiniLabel) { padding = labelRectOffset };
             wordWrapMiniLabelBold = new GUIStyle(wordWrapMiniLabel) { padding = labelRectOffset, font = EditorStyles.miniBoldFont };
+            wordWrapCenteredMiniLabel = new GUIStyle(wordWrapMiniLabel) { font = EditorStyles.miniFont, alignment = TextAnchor.MiddleCenter, stretchWidth = true } ;
+            wordWrapCenteredMiniLabelBold = new GUIStyle(wordWrapCenteredMiniLabel) { font = EditorStyles.miniBoldFont };
             prefixLabel = new GUIStyle(miniLabelBold) { alignment = TextAnchor.MiddleRight };
 
             // Buttons //////////////////////////////////////////////
