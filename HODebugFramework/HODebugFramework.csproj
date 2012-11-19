@@ -8,7 +8,7 @@
     <ProjectGuid>{7EE5EB82-4D97-4785-B297-73E8D0EADFF1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Holoville.DebugFramework</RootNamespace>
+    <RootNamespace>Holoville.HODebugFramework</RootNamespace>
     <AssemblyName>HODebugFramework</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DebugFramework")]
+[assembly: AssemblyTitle("HODebugFramework")]
 [assembly: AssemblyDescription("Debug Framework for Unity")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Holoville")]
-[assembly: AssemblyProduct("DebugFramework")]
+[assembly: AssemblyProduct("HODebugFramework")]
 [assembly: AssemblyCopyright("Copyright © Daniele Giardini, Holoville 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
