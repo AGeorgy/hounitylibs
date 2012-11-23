@@ -3,10 +3,11 @@
 // Created: 2012/11/22 19:33
 namespace Holoville.HO2DToolkit.Core
 {
-    internal enum TweenMode
+    internal enum ButtonActionType
     {
         None,
         OnRollover,
-        OnPress
+        OnPress,
+        OnClick
     }
 }

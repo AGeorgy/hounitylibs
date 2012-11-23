@@ -9,6 +9,21 @@
             Attach this component to a sprite to use it as a button.
             </summary>
         </member>
+        <member name="M:Holoville.HO2DToolkit.HOtk2dButton.SelectToggle">
+            <summary>
+            Toggles this button (only if it's a toggle button)
+            </summary>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.HOtk2dButton.DeselectToggle">
+            <summary>
+            Untoggles this button (only if it's a toggle button)
+            </summary>
+        </member>
+        <member name="P:Holoville.HO2DToolkit.HOtk2dButton.isToggled">
+            <summary>
+            Returns TRUE if this button is a toggle and is actually toggled/selected
+            </summary>
+        </member>
         <member name="P:Holoville.HO2DToolkit.HOtk2dButtonEvent.type">
             <summary>
             Type of event
@@ -43,11 +58,6 @@
             <summary>
             Manager for HO2DToolkit GUI elements,
             automatically added at runtime when needed.
-            </summary>
-        </member>
-        <member name="T:Holoville.HO2DToolkit.HOtk2dToggleButton">
-            <summary>
-            Toggle button
             </summary>
         </member>
         <member name="T:Holoville.HO2DToolkit.IHOtk2dTextMesh">
@@ -104,12 +114,6 @@
         <member name="F:Holoville.HO2DToolkit.HOtk2dButtonEventType.RollOut">
             <summary>
             The mouse rolled out of a button which has a rollover animation
-            </summary>
-        </member>
-        <member name="T:Holoville.HO2DToolkit.HOtk2dToggleButtonGroup">
-            <summary>
-            Allows creation of a group of toggle sprite buttons,
-            where selecting one will deselect all others (like radio buttons)
             </summary>
         </member>
     </members>

@@ -2,6 +2,7 @@
 // Copyright (c) 2012 Daniele Giardini - Holoville - http://www.holoville.com
 // Created: 2012/11/15 21:30
 
+using System.Collections.Generic;
 using Holoville.HO2DToolkit.Core;
 using Holoville.HOTween;
 using UnityEngine;
@@ -20,29 +21,38 @@ namespace Holoville.HO2DToolkit
         public event HOTk2dButtonDelegate Press;
         public event HOTk2dButtonDelegate Release;
         public event HOTk2dButtonDelegate Click;
+        public event HOTk2dButtonDelegate Toggle;
+        public event HOTk2dButtonDelegate Untoggle;
 
+        /// <summary>
+        /// Returns TRUE if this button is a toggle and is actually toggled/selected
+        /// </summary>
+        public bool isToggled { get; private set; }
         public Transform trans { get { if (_fooTrans == null) _fooTrans = transform; return _fooTrans; } }
-        public Collider coll { get { if (_fooColl == null) _fooColl = collider; return _fooColl; } }
         public IHOtk2dSprite sprite { get { if (_fooSprite == null) _fooSprite = this.GetComponent(typeof(IHOtk2dSprite)) as IHOtk2dSprite; return _fooSprite; } }
         public Camera cam { get { if (_camera == null) _camera = Camera.main; return _camera; } }
 
-        internal bool hasRollover { get { return _tweenColorOn == TweenMode.OnRollover || _tweenScaleOn == TweenMode.OnRollover; } }
+        internal bool hasRollover { get { return _tweenColorOn == ButtonActionType.OnRollover || _tweenScaleOn == ButtonActionType.OnRollover; } }
 
         [SerializeField] Camera _camera;
-        [SerializeField] TweenMode _tweenColorOn = TweenMode.None;
-        [SerializeField] TweenMode _tweenScaleOn = TweenMode.None;
+        [SerializeField] ButtonActionType _tweenColorOn = ButtonActionType.None;
+        [SerializeField] ButtonActionType _tweenScaleOn = ButtonActionType.None;
         [SerializeField] float _tweenScaleMultiplier = 1.1f;
         [SerializeField] Color _tweenColor = Color.white;
+        [SerializeField] bool _isToggle = false;
+        [SerializeField] ButtonActionType _toggleOn = ButtonActionType.OnPress;
+        [SerializeField] string _toggleGroupid = "";
 
         const float _TweenDuration = 0.25f;
+        static readonly Dictionary<string, List<HOtk2dButton>> _ButtonsByGroupId = new Dictionary<string, List<HOtk2dButton>>();
 
         bool _initialized;
         bool _isOver;
         bool _isPressed;
-        Sequence _deselectTween;
-        Sequence _rollout;
+        Sequence _rolloutTween;
+        Sequence _unpressTween;
+        Sequence _unclickTween;
         Transform _fooTrans;
-        Collider _fooColl;
         IHOtk2dSprite _fooSprite;
 
         // ===================================================================================
@@ -54,35 +64,77 @@ namespace Holoville.HO2DToolkit
                 _initialized = true;
                 // Create tweens
                 if (hasRollover) {
-                    _rollout = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
-                    if (_tweenScaleOn == TweenMode.OnRollover)
-                        _rollout.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
-                    if (_tweenColorOn == TweenMode.OnRollover)
-                        _rollout.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
-                    _rollout.Complete();
+                    _rolloutTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
+                    if (_tweenScaleOn == ButtonActionType.OnRollover)
+                        _rolloutTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
+                    if (_tweenColorOn == ButtonActionType.OnRollover)
+                        _rolloutTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
+                    _rolloutTween.Complete();
                 }
-                _deselectTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
-                if (_tweenScaleOn == TweenMode.OnPress)
-                    _deselectTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
-                if (_tweenColorOn == TweenMode.OnPress)
-                    _deselectTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
-                _deselectTween.Complete();
+                if (_tweenColorOn == ButtonActionType.OnPress || _tweenScaleOn == ButtonActionType.OnPress) {
+                    _unpressTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
+                    if (_tweenScaleOn == ButtonActionType.OnPress)
+                        _unpressTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
+                    if (_tweenColorOn == ButtonActionType.OnPress)
+                        _unpressTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
+                    _unpressTween.Complete();
+                }
+                if (_tweenColorOn == ButtonActionType.OnClick || _tweenScaleOn == ButtonActionType.OnClick) {
+                    _unclickTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
+                    if (_tweenScaleOn == ButtonActionType.OnClick)
+                        _unclickTween.Insert(0.15f, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
+                    if (_tweenColorOn == ButtonActionType.OnClick)
+                        _unclickTween.Insert(0.15f, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
+                    _unclickTween.Complete();
+                }
             }
             HOtk2dGUIManager.AddButton(this);
+            // Add to eventual toggle group
+            if (_isToggle && _toggleGroupid != "") {
+                if (_toggleGroupid == "") return;
+                if (_ButtonsByGroupId.ContainsKey(_toggleGroupid)) _ButtonsByGroupId.Add(_toggleGroupid, new List<HOtk2dButton>());
+                _ButtonsByGroupId[_toggleGroupid].Add(this);
+            }
         }
 
         protected virtual void OnDisable()
         {
             HOtk2dGUIManager.RemoveButton(this);
+            // Remove from eventual toggle group
+            if (_toggleGroupid != "") {
+                List<HOtk2dButton> bts = _ButtonsByGroupId[_toggleGroupid];
+                bts.RemoveAt(bts.IndexOf(this));
+                if (bts.Count <= 0) _ButtonsByGroupId.Remove(_toggleGroupid);
+            }
         }
 
         void OnDestroy()
         {
-            if (_rollout != null) _rollout.Kill();
-            if (_deselectTween != null) _deselectTween.Kill();
+            if (_rolloutTween != null) _rolloutTween.Kill();
+            if (_unpressTween != null) _unpressTween.Kill();
+            if (_unclickTween != null) _unclickTween.Kill();
             RollOver = null; RollOut = null;
             Press = null; Release = null;
-            Click = null;
+            Click = null; Toggle = null; Untoggle = null;
+        }
+
+        // ===================================================================================
+        // PUBLIC METHODS --------------------------------------------------------------------
+
+        /// <summary>
+        /// Toggles this button (only if it's a toggle button)
+        /// </summary>
+        public void SelectToggle()
+        {
+            if (_isToggle && !isToggled) DoToggle();
+        }
+
+        /// <summary>
+        /// Untoggles this button (only if it's a toggle button)
+        /// </summary>
+        public void DeselectToggle()
+        {
+            if (_isToggle && isToggled) DoUntoggle();
         }
 
         // ===================================================================================
@@ -103,35 +155,92 @@ namespace Holoville.HO2DToolkit
         void DoRollOver()
         {
             _isOver = true;
-            _rollout.Rewind();
-            if (RollOver != null) RollOver(new HOtk2dButtonEvent(HOtk2dButtonEventType.RollOver, this));
+            if (_isToggle && _toggleOn == ButtonActionType.OnRollover) {
+                if (isToggled) DoUntoggle(); else DoToggle();
+            } else {
+                if (_rolloutTween != null) _rolloutTween.Rewind();
+            }
+            DispatchEvent(RollOver, HOtk2dGUIManager.OnRollOver, HOtk2dButtonEventType.RollOver);
         }
 
         void DoRollOut()
         {
             _isOver = false;
-            _rollout.Restart();
-            if (RollOut != null) RollOut(new HOtk2dButtonEvent(HOtk2dButtonEventType.RollOut, this));
+            if (!_isToggle || _toggleOn != ButtonActionType.OnRollover) {
+                if (_rolloutTween != null) _rolloutTween.Restart();
+            }
+            DispatchEvent(RollOut, HOtk2dGUIManager.OnRollOut, HOtk2dButtonEventType.RollOut);
         }
 
         void DoPress()
         {
             _isPressed = true;
-            _deselectTween.Rewind();
-            if (Press != null) Press(new HOtk2dButtonEvent(HOtk2dButtonEventType.Press, this));
+            if (_isToggle && _toggleOn == ButtonActionType.OnPress) {
+                if (isToggled) DoUntoggle(); else DoToggle();
+            } else {
+                if (_unpressTween != null) _unpressTween.Rewind();
+            }
+            DispatchEvent(Press, HOtk2dGUIManager.OnPress, HOtk2dButtonEventType.Press);
         }
 
         void DoRelease(bool hasMouseFocus)
         {
             _isPressed = false;
-            _deselectTween.Restart();
+            if (!_isToggle || _toggleOn != ButtonActionType.OnPress) {
+                if (_unpressTween != null) _unpressTween.Restart();
+            }
             if (hasMouseFocus) DoClick();
-            if (Release != null) Release(new HOtk2dButtonEvent(HOtk2dButtonEventType.Release, this));
+            DispatchEvent(Release, HOtk2dGUIManager.OnRelease, HOtk2dButtonEventType.Release);
         }
 
         void DoClick()
         {
-            if (Click != null) Click(new HOtk2dButtonEvent(HOtk2dButtonEventType.Click, this));
+            if (_isToggle && _toggleOn == ButtonActionType.OnClick) {
+                if (isToggled) DoUntoggle(); else DoToggle();
+            } else {
+                if (_unclickTween != null) _unclickTween.Restart();
+            }
+            DispatchEvent(Click, HOtk2dGUIManager.OnClick, HOtk2dButtonEventType.Click);
+        }
+
+        void DoToggle()
+        {
+            isToggled = true;
+            switch (_toggleOn) {
+            case ButtonActionType.OnRollover:
+                if (_rolloutTween != null) _rolloutTween.Rewind();
+                break;
+            case ButtonActionType.OnPress:
+                if (_unpressTween != null) _unpressTween.Rewind();
+                break;
+            case ButtonActionType.OnClick:
+                if (_unclickTween != null) _unclickTween.Rewind();
+                break;
+            }
+            DispatchEvent(Toggle, HOtk2dGUIManager.OnToggle, HOtk2dButtonEventType.Toggle);
+        }
+
+        void DoUntoggle()
+        {
+            isToggled = false;
+            switch (_toggleOn) {
+            case ButtonActionType.OnRollover:
+                if (_rolloutTween != null) _rolloutTween.Restart();
+                break;
+            case ButtonActionType.OnPress:
+                if (_unpressTween != null) _unpressTween.Restart();
+                break;
+            case ButtonActionType.OnClick:
+                if (_unclickTween != null) _unclickTween.Restart();
+                break;
+            }
+            DispatchEvent(Untoggle, HOtk2dGUIManager.OnUntoggle, HOtk2dButtonEventType.Untoggle);
+        }
+
+        void DispatchEvent(HOTk2dButtonDelegate e, HOTk2dButtonDelegate eManager, HOtk2dButtonEventType type)
+        {
+            if (e != null) e(new HOtk2dButtonEvent(type, this));
+            eManager(new HOtk2dButtonEvent(type, this));
         }
     }
 }

@@ -14,6 +14,21 @@ namespace Holoville.HO2DToolkit
     /// </summary>
     public class HOtk2dGUIManager : MonoBehaviour
     {
+        public static event HOTk2dButtonDelegate RollOver;
+        internal static void OnRollOver(HOtk2dButtonEvent e) { if (RollOver != null) RollOver(e); }
+        public static event HOTk2dButtonDelegate RollOut;
+        internal static void OnRollOut(HOtk2dButtonEvent e) { if (RollOut != null) RollOut(e); }
+        public static event HOTk2dButtonDelegate Press;
+        internal static void OnPress(HOtk2dButtonEvent e) { if (Press != null) Press(e); }
+        public static event HOTk2dButtonDelegate Release;
+        internal static void OnRelease(HOtk2dButtonEvent e) { if (Release != null) Release(e); }
+        public static event HOTk2dButtonDelegate Click;
+        internal static void OnClick(HOtk2dButtonEvent e) { if (Click != null) Click(e); }
+        public static event HOTk2dButtonDelegate Toggle;
+        internal static void OnToggle(HOtk2dButtonEvent e) { if (Toggle != null) Toggle(e); }
+        public static event HOTk2dButtonDelegate Untoggle;
+        internal static void OnUntoggle(HOtk2dButtonEvent e) { if (Untoggle != null) Untoggle(e); }
+
         static readonly List<HOtk2dButton> _Buttons = new List<HOtk2dButton>();
         static readonly Dictionary<Transform, HOtk2dButton> _ButtonsByTrans = new Dictionary<Transform, HOtk2dButton>();
         static readonly List<Camera> _Cams = new List<Camera>(); // Set by RefreshData
