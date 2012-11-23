@@ -9,13 +9,17 @@ namespace Holoville.HO2DToolkit
     public enum HOtk2dButtonEventType
     {
         /// <summary>
-        /// A toggle button is toggled
+        /// A toggle button is selected
+        /// </summary>
+        Select,
+        /// <summary>
+        /// A toggle buttons is deselected
+        /// </summary>
+        Deselect,
+        /// <summary>
+        /// A toggle button is toggled (selected or deselected)
         /// </summary>
         Toggle,
-        /// <summary>
-        /// A toggle buttons is untoggled
-        /// </summary>
-        Untoggle,
         /// <summary>
         /// The mouse was pressed over the button
         /// </summary>

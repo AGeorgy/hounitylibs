@@ -24,10 +24,12 @@ namespace Holoville.HO2DToolkit
         internal static void OnRelease(HOtk2dButtonEvent e) { if (Release != null) Release(e); }
         public static event HOTk2dButtonDelegate Click;
         internal static void OnClick(HOtk2dButtonEvent e) { if (Click != null) Click(e); }
+        public static event HOTk2dButtonDelegate Select;
+        internal static void OnSelect(HOtk2dButtonEvent e) { if (Select != null) Select(e); }
+        public static event HOTk2dButtonDelegate Deselect;
+        internal static void OnDeselect(HOtk2dButtonEvent e) { if (Deselect != null) Deselect(e); }
         public static event HOTk2dButtonDelegate Toggle;
         internal static void OnToggle(HOtk2dButtonEvent e) { if (Toggle != null) Toggle(e); }
-        public static event HOTk2dButtonDelegate Untoggle;
-        internal static void OnUntoggle(HOtk2dButtonEvent e) { if (Untoggle != null) Untoggle(e); }
 
         static readonly List<HOtk2dButton> _Buttons = new List<HOtk2dButton>();
         static readonly Dictionary<Transform, HOtk2dButton> _ButtonsByTrans = new Dictionary<Transform, HOtk2dButton>();

@@ -21,13 +21,14 @@ namespace Holoville.HO2DToolkit
         public event HOTk2dButtonDelegate Press;
         public event HOTk2dButtonDelegate Release;
         public event HOTk2dButtonDelegate Click;
+        public event HOTk2dButtonDelegate Select;
+        public event HOTk2dButtonDelegate Deselect;
         public event HOTk2dButtonDelegate Toggle;
-        public event HOTk2dButtonDelegate Untoggle;
 
         /// <summary>
-        /// Returns TRUE if this button is a toggle and is actually toggled/selected
+        /// Returns TRUE if this button is a toggle and is actually selected
         /// </summary>
-        public bool isToggled { get; private set; }
+        public bool selected { get; private set; }
         public Transform trans { get { if (_fooTrans == null) _fooTrans = transform; return _fooTrans; } }
         public IHOtk2dSprite sprite { get { if (_fooSprite == null) _fooSprite = this.GetComponent(typeof(IHOtk2dSprite)) as IHOtk2dSprite; return _fooSprite; } }
         public Camera cam { get { if (_camera == null) _camera = Camera.main; return _camera; } }
@@ -44,7 +45,7 @@ namespace Holoville.HO2DToolkit
         [SerializeField] string _toggleGroupid = "";
 
         const float _TweenDuration = 0.25f;
-        static readonly Dictionary<string, List<HOtk2dButton>> _ButtonsByGroupId = new Dictionary<string, List<HOtk2dButton>>();
+        static readonly Dictionary<string, List<HOtk2dButton>> _TogglesByGroupId = new Dictionary<string, List<HOtk2dButton>>();
 
         bool _initialized;
         bool _isOver;
@@ -92,8 +93,8 @@ namespace Holoville.HO2DToolkit
             // Add to eventual toggle group
             if (_isToggle && _toggleGroupid != "") {
                 if (_toggleGroupid == "") return;
-                if (_ButtonsByGroupId.ContainsKey(_toggleGroupid)) _ButtonsByGroupId.Add(_toggleGroupid, new List<HOtk2dButton>());
-                _ButtonsByGroupId[_toggleGroupid].Add(this);
+                if (!_TogglesByGroupId.ContainsKey(_toggleGroupid)) _TogglesByGroupId.Add(_toggleGroupid, new List<HOtk2dButton>());
+                _TogglesByGroupId[_toggleGroupid].Add(this);
             }
         }
 
@@ -102,9 +103,9 @@ namespace Holoville.HO2DToolkit
             HOtk2dGUIManager.RemoveButton(this);
             // Remove from eventual toggle group
             if (_toggleGroupid != "") {
-                List<HOtk2dButton> bts = _ButtonsByGroupId[_toggleGroupid];
+                List<HOtk2dButton> bts = _TogglesByGroupId[_toggleGroupid];
                 bts.RemoveAt(bts.IndexOf(this));
-                if (bts.Count <= 0) _ButtonsByGroupId.Remove(_toggleGroupid);
+                if (bts.Count <= 0) _TogglesByGroupId.Remove(_toggleGroupid);
             }
         }
 
@@ -115,26 +116,26 @@ namespace Holoville.HO2DToolkit
             if (_unclickTween != null) _unclickTween.Kill();
             RollOver = null; RollOut = null;
             Press = null; Release = null;
-            Click = null; Toggle = null; Untoggle = null;
+            Click = null; Select = null; Deselect = null;
         }
 
         // ===================================================================================
         // PUBLIC METHODS --------------------------------------------------------------------
 
         /// <summary>
-        /// Toggles this button (only if it's a toggle button)
+        /// Selects this button (only if it's a toggle button)
         /// </summary>
-        public void SelectToggle()
+        public void ToggleOn()
         {
-            if (_isToggle && !isToggled) DoToggle();
+            if (_isToggle && !selected) DoSelect();
         }
 
         /// <summary>
-        /// Untoggles this button (only if it's a toggle button)
+        /// Deselects this button (only if it's a toggle button)
         /// </summary>
-        public void DeselectToggle()
+        public void ToggleOff()
         {
-            if (_isToggle && isToggled) DoUntoggle();
+            if (_isToggle && selected) DoDeselect();
         }
 
         // ===================================================================================
@@ -156,11 +157,11 @@ namespace Holoville.HO2DToolkit
         {
             _isOver = true;
             if (_isToggle && _toggleOn == ButtonActionType.OnRollover) {
-                if (isToggled) DoUntoggle(); else DoToggle();
+                if (selected) DoDeselect(); else DoSelect();
             } else {
                 if (_rolloutTween != null) _rolloutTween.Rewind();
             }
-            DispatchEvent(RollOver, HOtk2dGUIManager.OnRollOver, HOtk2dButtonEventType.RollOver);
+            DispatchEvent(this, RollOver, HOtk2dGUIManager.OnRollOver, HOtk2dButtonEventType.RollOver);
         }
 
         void DoRollOut()
@@ -169,18 +170,18 @@ namespace Holoville.HO2DToolkit
             if (!_isToggle || _toggleOn != ButtonActionType.OnRollover) {
                 if (_rolloutTween != null) _rolloutTween.Restart();
             }
-            DispatchEvent(RollOut, HOtk2dGUIManager.OnRollOut, HOtk2dButtonEventType.RollOut);
+            DispatchEvent(this, RollOut, HOtk2dGUIManager.OnRollOut, HOtk2dButtonEventType.RollOut);
         }
 
         void DoPress()
         {
             _isPressed = true;
             if (_isToggle && _toggleOn == ButtonActionType.OnPress) {
-                if (isToggled) DoUntoggle(); else DoToggle();
+                if (selected) DoDeselect(); else DoSelect();
             } else {
                 if (_unpressTween != null) _unpressTween.Rewind();
             }
-            DispatchEvent(Press, HOtk2dGUIManager.OnPress, HOtk2dButtonEventType.Press);
+            DispatchEvent(this, Press, HOtk2dGUIManager.OnPress, HOtk2dButtonEventType.Press);
         }
 
         void DoRelease(bool hasMouseFocus)
@@ -190,22 +191,24 @@ namespace Holoville.HO2DToolkit
                 if (_unpressTween != null) _unpressTween.Restart();
             }
             if (hasMouseFocus) DoClick();
-            DispatchEvent(Release, HOtk2dGUIManager.OnRelease, HOtk2dButtonEventType.Release);
+            DispatchEvent(this, Release, HOtk2dGUIManager.OnRelease, HOtk2dButtonEventType.Release);
         }
 
         void DoClick()
         {
             if (_isToggle && _toggleOn == ButtonActionType.OnClick) {
-                if (isToggled) DoUntoggle(); else DoToggle();
+                if (selected) DoDeselect(); else DoSelect();
             } else {
                 if (_unclickTween != null) _unclickTween.Restart();
             }
-            DispatchEvent(Click, HOtk2dGUIManager.OnClick, HOtk2dButtonEventType.Click);
+            DispatchEvent(this, Click, HOtk2dGUIManager.OnClick, HOtk2dButtonEventType.Click);
         }
 
-        void DoToggle()
+        void DoSelect()
         {
-            isToggled = true;
+            if (selected) return;
+            if (_toggleGroupid != "") DeselectByGroupId(_toggleGroupid);
+            selected = true;
             switch (_toggleOn) {
             case ButtonActionType.OnRollover:
                 if (_rolloutTween != null) _rolloutTween.Rewind();
@@ -217,12 +220,14 @@ namespace Holoville.HO2DToolkit
                 if (_unclickTween != null) _unclickTween.Rewind();
                 break;
             }
-            DispatchEvent(Toggle, HOtk2dGUIManager.OnToggle, HOtk2dButtonEventType.Toggle);
+            DispatchEvent(this, Toggle, HOtk2dGUIManager.OnToggle, HOtk2dButtonEventType.Toggle);
+            DispatchEvent(this, Select, HOtk2dGUIManager.OnSelect, HOtk2dButtonEventType.Select);
         }
 
-        void DoUntoggle()
+        void DoDeselect()
         {
-            isToggled = false;
+            if (!selected) return;
+            selected = false;
             switch (_toggleOn) {
             case ButtonActionType.OnRollover:
                 if (_rolloutTween != null) _rolloutTween.Restart();
@@ -234,13 +239,20 @@ namespace Holoville.HO2DToolkit
                 if (_unclickTween != null) _unclickTween.Restart();
                 break;
             }
-            DispatchEvent(Untoggle, HOtk2dGUIManager.OnUntoggle, HOtk2dButtonEventType.Untoggle);
+            DispatchEvent(this, Toggle, HOtk2dGUIManager.OnToggle, HOtk2dButtonEventType.Toggle);
+            DispatchEvent(this, Deselect, HOtk2dGUIManager.OnDeselect, HOtk2dButtonEventType.Deselect);
         }
 
-        void DispatchEvent(HOTk2dButtonDelegate e, HOTk2dButtonDelegate eManager, HOtk2dButtonEventType type)
+        static void DeselectByGroupId(string id)
         {
-            if (e != null) e(new HOtk2dButtonEvent(type, this));
-            eManager(new HOtk2dButtonEvent(type, this));
+            List<HOtk2dButton> buttons = _TogglesByGroupId[id];
+            foreach (HOtk2dButton button in buttons) button.DoDeselect();
+        }
+
+        static void DispatchEvent(HOtk2dButton button, HOTk2dButtonDelegate e, HOTk2dButtonDelegate eManager, HOtk2dButtonEventType type)
+        {
+            if (e != null) e(new HOtk2dButtonEvent(type, button));
+            eManager(new HOtk2dButtonEvent(type, button));
         }
     }
 }
