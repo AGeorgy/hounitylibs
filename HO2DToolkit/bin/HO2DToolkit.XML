@@ -60,6 +60,12 @@
             automatically added at runtime when needed.
             </summary>
         </member>
+        <member name="P:Holoville.HO2DToolkit.HOtk2dGUIManager.defaultGuiCamera">
+            <summary>
+            Camera that will be used for all new buttons that don't have a camera set.
+            Default to Camera.main if not set.
+            </summary>
+        </member>
         <member name="T:Holoville.HO2DToolkit.IHOtk2dTextMesh">
             <summary>
             Interface to add to the tk2dTextMesh class in order to use the HO2DToolkit library.

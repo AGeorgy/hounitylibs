@@ -31,10 +31,20 @@ namespace Holoville.HO2DToolkit
         public static event HOTk2dButtonDelegate Toggle;
         internal static void OnToggle(HOtk2dButtonEvent e) { if (Toggle != null) Toggle(e); }
 
+        /// <summary>
+        /// Camera that will be used for all new buttons that don't have a camera set.
+        /// Default to Camera.main if not set.
+        /// </summary>
+        public static Camera defaultGuiCamera {
+            get { if (_defaultGuiCamera == null) _defaultGuiCamera = Camera.main; return _defaultGuiCamera; }
+            set { _defaultGuiCamera = value; }
+        }
+
         static readonly List<HOtk2dButton> _Buttons = new List<HOtk2dButton>();
         static readonly Dictionary<Transform, HOtk2dButton> _ButtonsByTrans = new Dictionary<Transform, HOtk2dButton>();
         static readonly List<Camera> _Cams = new List<Camera>(); // Set by RefreshData
 
+        static Camera _defaultGuiCamera;
         static bool _hasRollovers; // Set by RefreshData
         static bool _requiresDataRefresh;
 
@@ -99,7 +109,7 @@ namespace Holoville.HO2DToolkit
             _hasRollovers = false;
             foreach (HOtk2dButton button in _Buttons) {
                 if (button.hasRollover) _hasRollovers = true;
-                if (_Cams.IndexOf(button.cam) == -1) _Cams.Add(button.cam);
+                if (_Cams.IndexOf(button.guiCamera) == -1) _Cams.Add(button.guiCamera);
             }
             _requiresDataRefresh = false;
         }

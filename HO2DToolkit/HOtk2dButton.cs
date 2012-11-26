@@ -31,11 +31,14 @@ namespace Holoville.HO2DToolkit
         public bool selected { get; private set; }
         public Transform trans { get { if (_fooTrans == null) _fooTrans = transform; return _fooTrans; } }
         public IHOtk2dSprite sprite { get { if (_fooSprite == null) _fooSprite = this.GetComponent(typeof(IHOtk2dSprite)) as IHOtk2dSprite; return _fooSprite; } }
-        public Camera cam { get { if (_camera == null) _camera = Camera.main; return _camera; } }
+        public Camera guiCamera {
+            get { if (_guiCamera == null) _guiCamera = HOtk2dGUIManager.defaultGuiCamera; return _guiCamera; }
+            set { ChangeCamera(value); }
+        }
 
         internal bool hasRollover { get { return _tweenColorOn == ButtonActionType.OnRollover || _tweenScaleOn == ButtonActionType.OnRollover; } }
 
-        [SerializeField] Camera _camera;
+        [SerializeField] Camera _guiCamera;
         [SerializeField] ButtonActionType _tweenColorOn = ButtonActionType.None;
         [SerializeField] ButtonActionType _tweenScaleOn = ButtonActionType.None;
         [SerializeField] float _tweenScaleMultiplier = 1.1f;
@@ -151,6 +154,13 @@ namespace Holoville.HO2DToolkit
                 if (_isPressed && mouseState == MouseState.Up) DoRelease(false);
                 if (_isOver && !isMousePressed) DoRollOut();
             }
+        }
+
+        void ChangeCamera(Camera cam)
+        {
+            _guiCamera = cam;
+            HOtk2dGUIManager.RemoveButton(this);
+            HOtk2dGUIManager.AddButton(this);
         }
 
         void DoRollOver()
