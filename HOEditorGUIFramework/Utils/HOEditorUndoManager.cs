@@ -95,12 +95,10 @@ namespace Holoville.HOEditorGUIFramework.Utils
         /// </param>
         public void CheckUndo(Object target, string name)
         {
-            Event e = Event.current;
-
             if (_waitingToRecordPrefab != null) {
                 // Record eventual prefab instance modification.
                 // TODO Avoid recording if nothing changed (no harm in doing so, but it would be nicer).
-                switch (e.type) {
+                switch (Event.current.type) {
                     case EventType.MouseDown:
                     case EventType.MouseUp:
                     case EventType.KeyDown:
@@ -109,8 +107,7 @@ namespace Holoville.HOEditorGUIFramework.Utils
                         break;
                 }
             }
-
-            if ((e.type == EventType.MouseDown && e.button == 0) || (e.type == EventType.KeyUp && e.keyCode == KeyCode.Tab)) {
+            if ((Event.current.type == EventType.MouseDown && Event.current.button == 0) || (Event.current.type == EventType.KeyUp && Event.current.keyCode == KeyCode.Tab)) {
                 // When the LMB is pressed or the TAB key is released,
                 // store a snapshot, but don't register it as an undo
                 // (so that if nothing changes we avoid storing a useless undo).

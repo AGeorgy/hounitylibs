@@ -77,22 +77,20 @@ namespace Holoville.HOEditorGUIFramework
             _unfocusedSelectionColor = new Color(selectionColor.r, selectionColor.g, selectionColor.b, 0.15f);
             if (_selectData == null || !_selectData.IsStoredList(selectableList)) _selectData = new GUISelectData(selectableList);
             
-            EventType eType = Event.current.type;
-
             // Check if something was deleted from the list before continuing
             if (selectionItemIndex == -1 || selectionItemIndex > _selectData.selectableItemsDatas.Count - 1) return false;
 
             GUISelectData.ItemData itemData = _selectData.selectableItemsDatas[selectionItemIndex];
-            if (eType == EventType.Repaint) itemData.rect = GUILayoutUtility.GetLastRect();
+            if (Event.current.type == EventType.Repaint) itemData.rect = GUILayoutUtility.GetLastRect();
             bool wasPressed = itemData.isPressed;
             bool selectionStatusChanged = false;
-            if (eType == EventType.MouseDown) {
+            if (Event.current.type == EventType.MouseDown) {
                 itemData.isPressed = itemData.rect.Contains(Event.current.mousePosition);
                 if (wasPressed != itemData.isPressed && !itemData.selected) {
                     selectionStatusChanged = true;
                     if (!itemData.selected) itemData.canBeDeselected = false;
                 }
-            } else if (eType == EventType.MouseUp || eType == EventType.Used || eType == EventType.DragExited) {
+            } else if (Event.current.type == EventType.MouseUp || Event.current.type == EventType.Used || Event.current.type == EventType.DragExited) {
                 if (!itemData.canBeDeselected) itemData.canBeDeselected = true;
                 else if (itemData.isPressed && itemData.selected && itemData.rect.Contains(Event.current.mousePosition)) selectionStatusChanged = true;
                 else if (HOGUIUtils.PanelContainsMouse() && itemData.selected && !Event.current.shift && !Event.current.control && !itemData.rect.Contains(Event.current.mousePosition)) {
