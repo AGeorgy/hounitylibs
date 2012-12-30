@@ -2,6 +2,7 @@
 // Copyright (c) 2012 Daniele Giardini - Holoville - http://www.holoville.com
 // Created: 2012/11/15 21:30
 
+using System.Collections;
 using System.Collections.Generic;
 using Holoville.HO2DToolkit.Core;
 using Holoville.HOTween;
@@ -66,31 +67,7 @@ namespace Holoville.HO2DToolkit
         {
             if (!_initialized) {
                 _initialized = true;
-                // Create tweens
-                if (hasRollover) {
-                    _rolloutTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
-                    if (_tweenScaleOn == ButtonActionType.OnRollover)
-                        _rolloutTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
-                    if (_tweenColorOn == ButtonActionType.OnRollover)
-                        _rolloutTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
-                    _rolloutTween.Complete();
-                }
-                if (_tweenColorOn == ButtonActionType.OnPress || _tweenScaleOn == ButtonActionType.OnPress) {
-                    _unpressTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
-                    if (_tweenScaleOn == ButtonActionType.OnPress)
-                        _unpressTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
-                    if (_tweenColorOn == ButtonActionType.OnPress)
-                        _unpressTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
-                    _unpressTween.Complete();
-                }
-                if (_tweenColorOn == ButtonActionType.OnClick || _tweenScaleOn == ButtonActionType.OnClick) {
-                    _unclickTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
-                    if (_tweenScaleOn == ButtonActionType.OnClick)
-                        _unclickTween.Insert(0.15f, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
-                    if (_tweenColorOn == ButtonActionType.OnClick)
-                        _unclickTween.Insert(0.15f, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
-                    _unclickTween.Complete();
-                }
+                StartCoroutine(OnEnableCoroutine());
             }
             HOtk2dGUIManager.AddButton(this);
             // Add to eventual toggle group
@@ -100,9 +77,40 @@ namespace Holoville.HO2DToolkit
                 _TogglesByGroupId[_toggleGroupid].Add(this);
             }
         }
+        IEnumerator OnEnableCoroutine()
+        {
+            yield return 0;
+
+            // Create tweens
+            if (hasRollover) {
+                _rolloutTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
+                if (_tweenScaleOn == ButtonActionType.OnRollover)
+                    _rolloutTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
+                if (_tweenColorOn == ButtonActionType.OnRollover)
+                    _rolloutTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
+                _rolloutTween.Complete();
+            }
+            if (_tweenColorOn == ButtonActionType.OnPress || _tweenScaleOn == ButtonActionType.OnPress) {
+                _unpressTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
+                if (_tweenScaleOn == ButtonActionType.OnPress)
+                    _unpressTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
+                if (_tweenColorOn == ButtonActionType.OnPress)
+                    _unpressTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
+                _unpressTween.Complete();
+            }
+            if (_tweenColorOn == ButtonActionType.OnClick || _tweenScaleOn == ButtonActionType.OnClick) {
+                _unclickTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
+                if (_tweenScaleOn == ButtonActionType.OnClick)
+                    _unclickTween.Insert(0.15f, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
+                if (_tweenColorOn == ButtonActionType.OnClick)
+                    _unclickTween.Insert(0.15f, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
+                _unclickTween.Complete();
+            }
+        }
 
         protected virtual void OnDisable()
         {
+            StopAllCoroutines();
             HOtk2dGUIManager.RemoveButton(this);
             // Remove from eventual toggle group
             if (_toggleGroupid != "") {

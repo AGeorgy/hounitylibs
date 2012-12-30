@@ -23,5 +23,9 @@ namespace Holoville.HO2DToolkit
         /// Sprite scale
         /// </summary>
         Vector3 scale { get; set; }
+        /// <summary>
+        /// Transform
+        /// </summary>
+        Transform transform { get; }
     }
 }

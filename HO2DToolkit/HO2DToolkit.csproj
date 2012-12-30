@@ -66,7 +66,7 @@ DEL $(TargetDir)\*.tmp
 
 CD $(TargetDir)
 echo Converting PDB to MDB and deleting PDB...
-pdb2mdb $(TargetFileName)
+"c:\Program Files\_Design\Unity 4\Editor\Data\MonoBleedingEdge\lib\mono\4.5\pdb2mdb.exe" $(TargetFileName)
 DEL $(TargetName).pdb
 
 echo Exporting Assembly to %25FullDestinationDir%25

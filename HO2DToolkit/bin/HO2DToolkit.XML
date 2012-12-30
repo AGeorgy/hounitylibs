@@ -54,6 +54,11 @@
             Sprite scale
             </summary>
         </member>
+        <member name="P:Holoville.HO2DToolkit.IHOtk2dSprite.transform">
+            <summary>
+            Transform
+            </summary>
+        </member>
         <member name="T:Holoville.HO2DToolkit.HOtk2dGUIManager">
             <summary>
             Manager for HO2DToolkit GUI elements,
