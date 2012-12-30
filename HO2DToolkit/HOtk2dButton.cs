@@ -26,6 +26,12 @@ namespace Holoville.HO2DToolkit
         public event HOTk2dButtonDelegate Deselect;
         public event HOTk2dButtonDelegate Toggle;
 
+        enum PreinitActionType
+        {
+            ToggleOn,
+            ToggleOff
+        }
+
         /// <summary>
         /// Returns TRUE if this button is a toggle and is actually selected
         /// </summary>
@@ -54,6 +60,7 @@ namespace Holoville.HO2DToolkit
         bool _initialized;
         bool _isOver;
         bool _isPressed;
+        Queue<PreinitActionType> _preinitActionsQueue; // Actions that are stored in case they're called before Start
         Sequence _rolloutTween;
         Sequence _unpressTween;
         Sequence _unclickTween;
@@ -65,10 +72,6 @@ namespace Holoville.HO2DToolkit
 
         protected virtual void OnEnable()
         {
-            if (!_initialized) {
-                _initialized = true;
-                StartCoroutine(OnEnableCoroutine());
-            }
             HOtk2dGUIManager.AddButton(this);
             // Add to eventual toggle group
             if (_isToggle && _toggleGroupid != "") {
@@ -77,9 +80,9 @@ namespace Holoville.HO2DToolkit
                 _TogglesByGroupId[_toggleGroupid].Add(this);
             }
         }
-        IEnumerator OnEnableCoroutine()
+        void Start()
         {
-            yield return 0;
+            _initialized = true;
 
             // Create tweens
             if (hasRollover) {
@@ -105,6 +108,20 @@ namespace Holoville.HO2DToolkit
                 if (_tweenColorOn == ButtonActionType.OnClick)
                     _unclickTween.Insert(0.15f, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
                 _unclickTween.Complete();
+            }
+
+            // Execute eventual cued actions
+            if (_preinitActionsQueue != null) {
+                foreach (PreinitActionType visualActionType in _preinitActionsQueue) {
+                    switch (visualActionType) {
+                    case PreinitActionType.ToggleOn:
+                        ToggleOn();
+                        break;
+                    case PreinitActionType.ToggleOff:
+                        ToggleOff();
+                        break;
+                    }
+                }
             }
         }
 
@@ -138,6 +155,11 @@ namespace Holoville.HO2DToolkit
         /// </summary>
         public void ToggleOn()
         {
+            if (!_initialized) {
+                if (_preinitActionsQueue == null) _preinitActionsQueue = new Queue<PreinitActionType>();
+                _preinitActionsQueue.Enqueue(PreinitActionType.ToggleOn);
+                return;
+            }
             if (_isToggle && !selected) DoSelect();
         }
 
@@ -146,6 +168,11 @@ namespace Holoville.HO2DToolkit
         /// </summary>
         public void ToggleOff()
         {
+            if (!_initialized) {
+                if (_preinitActionsQueue == null) _preinitActionsQueue = new Queue<PreinitActionType>();
+                _preinitActionsQueue.Enqueue(PreinitActionType.ToggleOff);
+                return;
+            }
             if (_isToggle && selected) DoDeselect();
         }
 
