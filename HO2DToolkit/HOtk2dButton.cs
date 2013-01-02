@@ -128,7 +128,7 @@ namespace Holoville.HO2DToolkit
         protected virtual void OnDisable()
         {
             StopAllCoroutines();
-            if (_isOver) DoRollOut();
+            if (_isOver) DoRollOut(true);
             HOtk2dGUIManager.RemoveButton(this);
             // Remove from eventual toggle group
             if (_toggleGroupid != "") {
@@ -210,11 +210,11 @@ namespace Holoville.HO2DToolkit
             DispatchEvent(this, RollOver, HOtk2dGUIManager.OnRollOver, HOtk2dButtonEventType.RollOver);
         }
 
-        void DoRollOut()
+        void DoRollOut(bool instantTween = false)
         {
             _isOver = false;
             if (!_isToggle || _toggleOn != ButtonActionType.OnRollover) {
-                if (_rolloutTween != null) _rolloutTween.Restart();
+                if (_rolloutTween != null) _rolloutTween.Complete();
             }
             DispatchEvent(this, RollOut, HOtk2dGUIManager.OnRollOut, HOtk2dButtonEventType.RollOut);
         }
