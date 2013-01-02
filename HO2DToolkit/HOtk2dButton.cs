@@ -128,6 +128,7 @@ namespace Holoville.HO2DToolkit
         protected virtual void OnDisable()
         {
             StopAllCoroutines();
+            if (_isOver) DoRollOut();
             HOtk2dGUIManager.RemoveButton(this);
             // Remove from eventual toggle group
             if (_toggleGroupid != "") {

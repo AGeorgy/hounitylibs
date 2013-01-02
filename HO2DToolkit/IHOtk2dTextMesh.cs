@@ -1,6 +1,9 @@
 ﻿// Author: Daniele Giardini
 // Copyright (c) 2012 Daniele Giardini - Holoville - http://www.holoville.com
 // Created: 2012/11/22 14:18
+
+using UnityEngine;
+
 namespace Holoville.HO2DToolkit
 {
     /// <summary>
@@ -12,6 +15,22 @@ namespace Holoville.HO2DToolkit
         /// Text
         /// </summary>
         string text { get; set; }
+        /// <summary>
+        /// Color
+        /// </summary>
+        Color color { get; set; }
+        /// <summary>
+        /// Scale
+        /// </summary>
+        Vector3 scale { get; set; }
+        /// <summary>
+        /// GameObject
+        /// </summary>
+        GameObject gameObject { get; }
+        /// <summary>
+        /// Transform
+        /// </summary>
+        Transform transform { get; }
 
         /// <summary>
         /// Commits the changes to the text

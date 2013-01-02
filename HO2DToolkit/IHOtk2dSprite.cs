@@ -20,9 +20,13 @@ namespace Holoville.HO2DToolkit
         /// </summary>
         Color color { get; set; }
         /// <summary>
-        /// Sprite scale
+        /// Scale
         /// </summary>
         Vector3 scale { get; set; }
+        /// <summary>
+        /// GameObject
+        /// </summary>
+        GameObject gameObject { get; }
         /// <summary>
         /// Transform
         /// </summary>

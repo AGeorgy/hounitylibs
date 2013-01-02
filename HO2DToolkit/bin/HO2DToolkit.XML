@@ -51,7 +51,12 @@
         </member>
         <member name="P:Holoville.HO2DToolkit.IHOtk2dSprite.scale">
             <summary>
-            Sprite scale
+            Scale
+            </summary>
+        </member>
+        <member name="P:Holoville.HO2DToolkit.IHOtk2dSprite.gameObject">
+            <summary>
+            GameObject
             </summary>
         </member>
         <member name="P:Holoville.HO2DToolkit.IHOtk2dSprite.transform">
@@ -84,6 +89,26 @@
         <member name="P:Holoville.HO2DToolkit.IHOtk2dTextMesh.text">
             <summary>
             Text
+            </summary>
+        </member>
+        <member name="P:Holoville.HO2DToolkit.IHOtk2dTextMesh.color">
+            <summary>
+            Color
+            </summary>
+        </member>
+        <member name="P:Holoville.HO2DToolkit.IHOtk2dTextMesh.scale">
+            <summary>
+            Scale
+            </summary>
+        </member>
+        <member name="P:Holoville.HO2DToolkit.IHOtk2dTextMesh.gameObject">
+            <summary>
+            GameObject
+            </summary>
+        </member>
+        <member name="P:Holoville.HO2DToolkit.IHOtk2dTextMesh.transform">
+            <summary>
+            Transform
             </summary>
         </member>
         <member name="T:Holoville.HO2DToolkit.HOtk2dButtonEventType">
