@@ -42,6 +42,7 @@ namespace Holoville.HO2DToolkit
             get { if (_guiCamera == null) _guiCamera = HOtk2dGUIManager.defaultGuiCamera; return _guiCamera; }
             set { ChangeCamera(value); }
         }
+        public bool isToggle { get { return _isToggle; } }
 
         internal bool hasRollover { get { return _tweenColorOn == ButtonActionType.OnRollover || _tweenScaleOn == ButtonActionType.OnRollover; } }
 
@@ -128,7 +129,9 @@ namespace Holoville.HO2DToolkit
         protected virtual void OnDisable()
         {
             StopAllCoroutines();
-            if (_isOver) DoRollOut(true);
+            if (_isOver) DoRollOut();
+            if (_isPressed) DoRelease(false, true);
+            if (_unclickTween != null && !_unclickTween.isPaused) _unclickTween.Complete();
             HOtk2dGUIManager.RemoveButton(this);
             // Remove from eventual toggle group
             if (_toggleGroupid != "") {
@@ -210,7 +213,7 @@ namespace Holoville.HO2DToolkit
             DispatchEvent(this, RollOver, HOtk2dGUIManager.OnRollOver, HOtk2dButtonEventType.RollOver);
         }
 
-        void DoRollOut(bool instantTween = false)
+        void DoRollOut()
         {
             _isOver = false;
             if (!_isToggle || _toggleOn != ButtonActionType.OnRollover) {
@@ -230,11 +233,14 @@ namespace Holoville.HO2DToolkit
             DispatchEvent(this, Press, HOtk2dGUIManager.OnPress, HOtk2dButtonEventType.Press);
         }
 
-        void DoRelease(bool hasMouseFocus)
+        void DoRelease(bool hasMouseFocus, bool instantTween = false)
         {
             _isPressed = false;
             if (!_isToggle || _toggleOn != ButtonActionType.OnPress) {
-                if (_unpressTween != null) _unpressTween.Restart();
+                if (_unpressTween != null) {
+                    if (instantTween) _unpressTween.Complete();
+                    else _unpressTween.Restart();
+                }
             }
             if (hasMouseFocus) DoClick();
             DispatchEvent(this, Release, HOtk2dGUIManager.OnRelease, HOtk2dButtonEventType.Release);

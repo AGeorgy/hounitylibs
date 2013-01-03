@@ -74,8 +74,8 @@ namespace Holoville.HO2DToolkit
             MouseState mouseState = isMouseDown ? MouseState.JustPressed : isMousePressed ? MouseState.Pressed : isMouseUp ? MouseState.Released : MouseState.Up;
             if (isMouseDown || isMouseUp || _hasRollovers) {
                 List<HOtk2dButton> hitButtons = GetOverButtons(Input.mousePosition);
-                int len = _Buttons.Count;
-                for (int i = 0; i < len; ++i) {
+                int len = _Buttons.Count - 1;
+                for (int i = len; i > -1; --i) {
                     HOtk2dButton button = _Buttons[i];
                     button.Refresh(hitButtons.IndexOf(button) != -1, mouseState, isMousePressed);
                 }
