@@ -89,7 +89,7 @@ namespace Holoville.HO2DToolkit
             if (hasRollover) {
                 _rolloutTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
                 if (_tweenScaleOn == ButtonActionType.OnRollover)
-                    _rolloutTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
+                    _rolloutTween.Insert(0, HOTween.HOTween.From(trans, _TweenDuration, "localScale", trans.localScale * _tweenScaleMultiplier));
                 if (_tweenColorOn == ButtonActionType.OnRollover)
                     _rolloutTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
                 _rolloutTween.Complete();
@@ -97,7 +97,7 @@ namespace Holoville.HO2DToolkit
             if (_tweenColorOn == ButtonActionType.OnPress || _tweenScaleOn == ButtonActionType.OnPress) {
                 _unpressTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
                 if (_tweenScaleOn == ButtonActionType.OnPress)
-                    _unpressTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
+                    _unpressTween.Insert(0, HOTween.HOTween.From(trans, _TweenDuration, "localScale", trans.localScale * _tweenScaleMultiplier));
                 if (_tweenColorOn == ButtonActionType.OnPress)
                     _unpressTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
                 _unpressTween.Complete();
@@ -105,7 +105,7 @@ namespace Holoville.HO2DToolkit
             if (_tweenColorOn == ButtonActionType.OnClick || _tweenScaleOn == ButtonActionType.OnClick) {
                 _unclickTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
                 if (_tweenScaleOn == ButtonActionType.OnClick)
-                    _unclickTween.Insert(0.15f, HOTween.HOTween.From(sprite, _TweenDuration, "scale", sprite.scale * _tweenScaleMultiplier));
+                    _unclickTween.Insert(0.15f, HOTween.HOTween.From(trans, _TweenDuration, "localScale", trans.localScale * _tweenScaleMultiplier));
                 if (_tweenColorOn == ButtonActionType.OnClick)
                     _unclickTween.Insert(0.15f, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
                 _unclickTween.Complete();

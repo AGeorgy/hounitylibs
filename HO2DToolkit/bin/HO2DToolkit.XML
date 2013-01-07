@@ -157,5 +157,10 @@
             The mouse rolled out of a button which has a rollover animation
             </summary>
         </member>
+        <member name="P:Holoville.HO2DToolkit.IHOtk2dSlicedSprite.dimensions">
+            <summary>
+            Slice dimensions
+            </summary>
+        </member>
     </members>
 </doc>

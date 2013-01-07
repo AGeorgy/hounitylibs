@@ -52,6 +52,7 @@
     <Compile Include="HOtk2dButtonEvent.cs" />
     <Compile Include="HOtk2dButtonEventType.cs" />
     <Compile Include="HOtk2dGUIManager.cs" />
+    <Compile Include="IHOtk2dSlicedSprite.cs" />
     <Compile Include="IHOtk2dSprite.cs" />
     <Compile Include="IHOtk2dTextMesh.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
