@@ -9,7 +9,7 @@ namespace Holoville.HO2DToolkit
     /// <summary>
     /// Interface to add to the tk2dTextMesh class in order to use the HO2DToolkit library.
     /// </summary>
-    public interface IHOtk2dTextMesh
+    public interface IHOtk2dTextMesh : IHOtk2dBase
     {
         /// <summary>
         /// Text

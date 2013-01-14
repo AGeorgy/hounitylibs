@@ -12,5 +12,21 @@ namespace Holoville.HO2DToolkit
         /// Slice dimensions
         /// </summary>
         Vector2 dimensions { get; set; }
+        /// <summary>
+        /// Color
+        /// </summary>
+        Color color { get; set; }
+        /// <summary>
+        /// Scale
+        /// </summary>
+        Vector3 scale { get; set; }
+        /// <summary>
+        /// GameObject
+        /// </summary>
+        GameObject gameObject { get; }
+        /// <summary>
+        /// Transform
+        /// </summary>
+        Transform transform { get; }
     }
 }

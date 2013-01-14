@@ -51,6 +51,7 @@ namespace Holoville.HO2DToolkit
         [SerializeField] ButtonActionType _tweenScaleOn = ButtonActionType.None;
         [SerializeField] float _tweenScaleMultiplier = 1.1f;
         [SerializeField] Color _tweenColor = Color.white;
+        [SerializeField] bool _tweenChildren; // only used for color, since otherwise children are scaled automatically
         [SerializeField] bool _isToggle = false;
         [SerializeField] ButtonActionType _toggleOn = ButtonActionType.OnPress;
         [SerializeField] string _toggleGroupid = "";
@@ -62,6 +63,7 @@ namespace Holoville.HO2DToolkit
         bool _isOver;
         bool _isPressed;
         Queue<PreinitActionType> _preinitActionsQueue; // Actions that are stored in case they're called before Start
+        List<IHOtk2dTextMesh> _txtMeshesToUpdate = new List<IHOtk2dTextMesh>(10);
         Sequence _rolloutTween;
         Sequence _unpressTween;
         Sequence _unclickTween;
@@ -85,29 +87,70 @@ namespace Holoville.HO2DToolkit
         {
             _initialized = true;
 
+            List<IHOtk2dBase> childrenSprites = null;
+            bool hasChildrenToTween = false;
+            bool hasTextMeshesToTween = false;
+            if (_tweenChildren && _tweenColorOn != ButtonActionType.None) {
+                Component[] children = gameObject.GetComponentsInChildren(typeof(IHOtk2dBase));
+                childrenSprites = new List<IHOtk2dBase>();
+                foreach (Component child in children) {
+                    if (child == this.sprite) continue;
+                    childrenSprites.Add(child as IHOtk2dBase);
+                    IHOtk2dTextMesh txtMesh = child as IHOtk2dTextMesh;
+                    if (txtMesh != null) _txtMeshesToUpdate.Add(txtMesh);
+                }
+                hasChildrenToTween = childrenSprites.Count > 0;
+                hasTextMeshesToTween = _txtMeshesToUpdate.Count > 0;
+            }
+
             // Create tweens
+            SequenceParms seqParms;
             if (hasRollover) {
-                _rolloutTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
+                seqParms = new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false);
+                if (hasTextMeshesToTween) seqParms.OnUpdate(UpdateTextMeshes);
+                _rolloutTween = new Sequence(seqParms);
                 if (_tweenScaleOn == ButtonActionType.OnRollover)
                     _rolloutTween.Insert(0, HOTween.HOTween.From(trans, _TweenDuration, "localScale", trans.localScale * _tweenScaleMultiplier));
-                if (_tweenColorOn == ButtonActionType.OnRollover)
+                if (_tweenColorOn == ButtonActionType.OnRollover) {
                     _rolloutTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
+                    if (hasChildrenToTween) {
+                        foreach (IHOtk2dBase childSprite in childrenSprites) {
+                            _rolloutTween.Insert(0, HOTween.HOTween.From(childSprite, _TweenDuration, "color", _tweenColor));
+                        }
+                    }
+                }
                 _rolloutTween.Complete();
             }
             if (_tweenColorOn == ButtonActionType.OnPress || _tweenScaleOn == ButtonActionType.OnPress) {
-                _unpressTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
+                seqParms = new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false);
+                if (hasTextMeshesToTween) seqParms.OnUpdate(UpdateTextMeshes);
+                _unpressTween = new Sequence(seqParms);
                 if (_tweenScaleOn == ButtonActionType.OnPress)
                     _unpressTween.Insert(0, HOTween.HOTween.From(trans, _TweenDuration, "localScale", trans.localScale * _tweenScaleMultiplier));
-                if (_tweenColorOn == ButtonActionType.OnPress)
+                if (_tweenColorOn == ButtonActionType.OnPress) {
                     _unpressTween.Insert(0, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
+                    if (hasChildrenToTween) {
+                        foreach (IHOtk2dBase childSprite in childrenSprites) {
+                            _rolloutTween.Insert(0, HOTween.HOTween.From(childSprite, _TweenDuration, "color", _tweenColor));
+                        }
+                    }
+                }
                 _unpressTween.Complete();
             }
             if (_tweenColorOn == ButtonActionType.OnClick || _tweenScaleOn == ButtonActionType.OnClick) {
-                _unclickTween = new Sequence(new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false));
+                seqParms = new SequenceParms().UpdateType(UpdateType.TimeScaleIndependentUpdate).AutoKill(false);
+                if (hasTextMeshesToTween) seqParms.OnUpdate(UpdateTextMeshes);
+                _unclickTween = new Sequence(seqParms);
                 if (_tweenScaleOn == ButtonActionType.OnClick)
                     _unclickTween.Insert(0.15f, HOTween.HOTween.From(trans, _TweenDuration, "localScale", trans.localScale * _tweenScaleMultiplier));
-                if (_tweenColorOn == ButtonActionType.OnClick)
+                if (_tweenColorOn == ButtonActionType.OnClick) {
                     _unclickTween.Insert(0.15f, HOTween.HOTween.From(sprite, _TweenDuration, "color", _tweenColor));
+                    if (hasChildrenToTween) {
+                        foreach (IHOtk2dBase childSprite in childrenSprites) {
+                            _rolloutTween.Insert(0, HOTween.HOTween.From(childSprite, _TweenDuration, "color", _tweenColor));
+                        }
+                    }
+                }
                 _unclickTween.Complete();
             }
 
@@ -202,6 +245,13 @@ namespace Holoville.HO2DToolkit
             HOtk2dGUIManager.AddButton(this);
         }
 
+        void UpdateTextMeshes()
+        {
+            foreach (IHOtk2dTextMesh txtMesh in _txtMeshesToUpdate) {
+                txtMesh.Commit();
+            }
+        }
+
         void DoRollOver()
         {
             _isOver = true;
@@ -217,7 +267,7 @@ namespace Holoville.HO2DToolkit
         {
             _isOver = false;
             if (!_isToggle || _toggleOn != ButtonActionType.OnRollover) {
-                if (_rolloutTween != null) _rolloutTween.Complete();
+                if (_rolloutTween != null) _rolloutTween.Play();
             }
             DispatchEvent(this, RollOut, HOtk2dGUIManager.OnRollOut, HOtk2dButtonEventType.RollOut);
         }
