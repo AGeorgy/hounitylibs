@@ -36,6 +36,7 @@ namespace Holoville.HO2DToolkit
         /// Returns TRUE if this button is a toggle and is actually selected
         /// </summary>
         public bool selected { get; private set; }
+        public string id = "";
         public Transform trans { get { if (_fooTrans == null) _fooTrans = transform; return _fooTrans; } }
         public IHOtk2dSprite sprite { get { if (_fooSprite == null) _fooSprite = this.GetComponent(typeof(IHOtk2dSprite)) as IHOtk2dSprite; return _fooSprite; } }
         public Camera guiCamera {

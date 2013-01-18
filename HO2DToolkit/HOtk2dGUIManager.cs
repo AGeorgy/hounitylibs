@@ -76,6 +76,7 @@ namespace Holoville.HO2DToolkit
                 List<HOtk2dButton> hitButtons = GetOverButtons(Input.mousePosition);
                 int len = _Buttons.Count - 1;
                 for (int i = len; i > -1; --i) {
+                    if (i > _Buttons.Count - 1) continue;
                     HOtk2dButton button = _Buttons[i];
                     button.Refresh(hitButtons.IndexOf(button) != -1, mouseState, isMousePressed);
                 }
