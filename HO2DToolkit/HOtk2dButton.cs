@@ -349,7 +349,11 @@ namespace Holoville.HO2DToolkit
         static void DeselectByGroupId(string id)
         {
             List<HOtk2dButton> buttons = _TogglesByGroupId[id];
-            foreach (HOtk2dButton button in buttons) button.DoDeselect();
+            int len = buttons.Count - 1;
+            for (int i = len; i > -1; --i) {
+                if (i > buttons.Count - 1) continue;
+                buttons[i].DoDeselect();
+            }
         }
 
         static void DispatchEvent(HOtk2dButton button, HOTk2dButtonDelegate e, HOTk2dButtonDelegate eManager, HOtk2dButtonEventType type)
