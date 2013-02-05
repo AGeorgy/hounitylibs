@@ -61,6 +61,7 @@ namespace Holoville.HO2DToolkit
         static readonly Dictionary<string, List<HOtk2dButton>> _TogglesByGroupId = new Dictionary<string, List<HOtk2dButton>>();
 
         bool _initialized;
+        bool _isRadioButton;
         bool _isOver;
         bool _isPressed;
         Queue<PreinitActionType> _preinitActionsQueue; // Actions that are stored in case they're called before Start
@@ -87,6 +88,8 @@ namespace Holoville.HO2DToolkit
         void Start()
         {
             _initialized = true;
+
+            _isRadioButton = _toggleGroupid != "";
 
             List<IHOtk2dBase> childrenSprites = null;
             bool hasChildrenToTween = false;
@@ -257,7 +260,7 @@ namespace Holoville.HO2DToolkit
         {
             _isOver = true;
             if (_isToggle && _toggleOn == ButtonActionType.OnRollover) {
-                if (selected) DoDeselect(); else DoSelect();
+                if (selected && !_isRadioButton) DoDeselect(); else DoSelect();
             } else {
                 if (_rolloutTween != null) _rolloutTween.Rewind();
             }
@@ -277,7 +280,7 @@ namespace Holoville.HO2DToolkit
         {
             _isPressed = true;
             if (_isToggle && _toggleOn == ButtonActionType.OnPress) {
-                if (selected) DoDeselect(); else DoSelect();
+                if (selected && !_isRadioButton) DoDeselect(); else DoSelect();
             } else {
                 if (_unpressTween != null) _unpressTween.Rewind();
             }
@@ -300,7 +303,7 @@ namespace Holoville.HO2DToolkit
         void DoClick()
         {
             if (_isToggle && _toggleOn == ButtonActionType.OnClick) {
-                if (selected) DoDeselect(); else DoSelect();
+                if (selected && !_isRadioButton) DoDeselect(); else DoSelect();
             } else {
                 if (_unclickTween != null) _unclickTween.Restart();
             }
