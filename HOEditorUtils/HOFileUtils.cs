@@ -23,12 +23,12 @@ namespace Holoville.HOEditorUtils
         {
             get
             {
-                if (__projectPath == null) {
-                    __projectPath = Application.dataPath;
-                    __projectPath = __projectPath.Substring(0, __projectPath.LastIndexOf("/"));
-                    __projectPath = __projectPath.Replace("/", "\\");
+                if (_fooProjectPath == null) {
+                    _fooProjectPath = Application.dataPath;
+                    _fooProjectPath = _fooProjectPath.Substring(0, _fooProjectPath.LastIndexOf(UnityADBPathSlash));
+                    _fooProjectPath = _fooProjectPath.Replace(pathSlashToReplace, pathSlash);
                 }
-                return __projectPath;
+                return _fooProjectPath;
             }
         }
         /// <summary>
@@ -36,7 +36,21 @@ namespace Holoville.HOEditorUtils
         /// </summary>
         public static string assetsPath { get { return projectPath + "\\Assets"; } }
 
-        static string __projectPath;
+        internal const string UnityADBPathSlash = "/"; // default ADB path slash for Unity, on every platform
+        internal static string pathSlash { get; private set; }
+        internal static string pathSlashToReplace { get; private set; }
+        static string _fooProjectPath;
+
+        // ***********************************************************************************
+        // CONSTRUCTOR
+        // ***********************************************************************************
+
+        static HOFileUtils()
+        {
+            bool useWindowsSlashes = Application.platform == RuntimePlatform.WindowsEditor;
+            pathSlash = useWindowsSlashes ? "\\" : "/";
+            pathSlashToReplace = useWindowsSlashes ? "/" : "\\";
+        }
 
         // ===================================================================================
         // PUBLIC METHODS --------------------------------------------------------------------
@@ -48,7 +62,7 @@ namespace Holoville.HOEditorUtils
         public static string FullPathToADBPath(string fullPath)
         {
             string adbPath = fullPath.Substring(projectPath.Length + 1);
-            return adbPath.Replace("\\", "/");
+            return adbPath.Replace(pathSlashToReplace, pathSlash);
         }
 
         /// <summary>
@@ -57,8 +71,8 @@ namespace Holoville.HOEditorUtils
         /// </summary>
         public static string ADBPathToFullPath(string adbPath)
         {
-            adbPath = adbPath.Replace("/", "\\");
-            return projectPath + "\\" + adbPath;
+            adbPath = adbPath.Replace(pathSlashToReplace, pathSlash);
+            return projectPath + pathSlash + adbPath;
         }
 
         /// <summary>
@@ -134,11 +148,11 @@ namespace Holoville.HOEditorUtils
             if (selectionADBPath.Length > 0) {
                 string assetDirectoryPath = ADBPathToFullPath(selectionADBPath);
                 if ((File.GetAttributes(assetDirectoryPath) & FileAttributes.Directory) != FileAttributes.Directory) {
-                    assetDirectoryPath = assetDirectoryPath.Substring(0, assetDirectoryPath.LastIndexOf("\\"));
+                    assetDirectoryPath = assetDirectoryPath.Substring(0, assetDirectoryPath.LastIndexOf(pathSlash));
                 }
-                assetADBPath = FullPathToADBPath(assetDirectoryPath) + "/" + fileName;
+                assetADBPath = FullPathToADBPath(assetDirectoryPath) + UnityADBPathSlash + fileName;
             } else {
-                assetADBPath = FullPathToADBPath(assetsPath) + "/" + fileName;
+                assetADBPath = FullPathToADBPath(assetsPath) + UnityADBPathSlash + fileName;
             }
             return AssetDatabase.GenerateUniqueAssetPath(assetADBPath);
         }
@@ -153,14 +167,14 @@ namespace Holoville.HOEditorUtils
         static public void RenameAsset(string assetADBPath, string newName)
         {
             string assetOriginalPath = ADBPathToFullPath(assetADBPath);
-            string assetDirectoryPath = assetOriginalPath.Substring(0, assetOriginalPath.LastIndexOf("\\"));
+            string assetDirectoryPath = assetOriginalPath.Substring(0, assetOriginalPath.LastIndexOf(pathSlash));
             string extension = assetADBPath.Substring(assetADBPath.LastIndexOf("."));
             string newValidName = newName;
-            string newAssetPath = assetDirectoryPath + "\\" + newValidName + extension;
+            string newAssetPath = assetDirectoryPath + pathSlash + newValidName + extension;
             int num = 0;
             while (File.Exists(newAssetPath) && newAssetPath != assetOriginalPath) {
                 newValidName = newName + " " + (++num);
-                newAssetPath = assetDirectoryPath + "\\" + newValidName + extension;
+                newAssetPath = assetDirectoryPath + pathSlash + newValidName + extension;
             }
             string res = AssetDatabase.RenameAsset(assetADBPath, newValidName);
             if (res != "") Debug.LogError(res);

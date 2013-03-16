@@ -57,12 +57,12 @@ namespace Holoville.HOEditorUtils
 
         static void CreateMenuItem<T>(string directoryPath, string name, bool isDockableWindow, bool useShortcut, bool useCtrl, bool useShift, string letter)
         {
-            directoryPath = directoryPath.Replace("/", "\\");
+            directoryPath = directoryPath.Replace(HOFileUtils.pathSlashToReplace, HOFileUtils.pathSlash);
             Type type = typeof (T);
             string nameSpace = type.Namespace;
             string className = type.Name;
             string fileClassName = className + "MenuItem";
-            string filePath = directoryPath + "\\" + fileClassName + ".cs";
+            string filePath = directoryPath + HOFileUtils.pathSlash + fileClassName + ".cs";
 
             string dockable = (isDockableWindow ? "false" : "true");
             string shortcut = "";
