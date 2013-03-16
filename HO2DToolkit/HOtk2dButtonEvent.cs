@@ -20,7 +20,7 @@ namespace Holoville.HO2DToolkit
         // CONSTRUCTOR
         // ***********************************************************************************
 
-        internal HOtk2dButtonEvent(HOtk2dButtonEventType type, HOtk2dButton target)
+        public HOtk2dButtonEvent(HOtk2dButtonEventType type, HOtk2dButton target)
         {
             this.target = target;
             this.type = type;
