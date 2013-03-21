@@ -23,6 +23,6 @@ namespace Holoville.HO2DToolkit
         /// <summary>
         /// Transform
         /// </summary>
-        Transform transform { get; } 
+        Transform transform { get; }
     }
 }

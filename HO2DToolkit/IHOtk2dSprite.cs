@@ -23,6 +23,7 @@ namespace Holoville.HO2DToolkit
         /// Scale
         /// </summary>
         Vector3 scale { get; set; }
+
         /// <summary>
         /// GameObject
         /// </summary>
@@ -31,5 +32,17 @@ namespace Holoville.HO2DToolkit
         /// Transform
         /// </summary>
         Transform transform { get; }
+
+        /// <summary>
+        /// Sets the sprite to the one with the given name, or returns FALSE if none corresponds
+        /// </summary>
+        bool SetSprite(string name);
+
+        // MODS ADDED TO CODE
+
+        /// <summary>
+        /// Returns the name of the sprite in the collection (add this method to tk2dBaseSprite)
+        /// </summary>
+        string GetSpriteName();
     }
 }

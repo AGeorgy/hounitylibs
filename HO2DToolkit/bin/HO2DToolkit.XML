@@ -59,6 +59,16 @@
             Interface to add to the tk2dBaseSprite class in order to use the HO2DToolkit library.
             </summary>
         </member>
+        <member name="M:Holoville.HO2DToolkit.IHOtk2dSprite.SetSprite(System.String)">
+            <summary>
+            Sets the sprite to the one with the given name, or returns FALSE if none corresponds
+            </summary>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.IHOtk2dSprite.GetSpriteName">
+            <summary>
+            Returns the name of the sprite in the collection (add this method to tk2dBaseSprite)
+            </summary>
+        </member>
         <member name="P:Holoville.HO2DToolkit.IHOtk2dSprite.spriteId">
             <summary>
             Sprite id
@@ -175,6 +185,16 @@
         <member name="F:Holoville.HO2DToolkit.HOtk2dButtonEventType.RollOut">
             <summary>
             The mouse rolled out of a button which has a rollover animation
+            </summary>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.IHOtk2dSlicedSprite.SetSprite(System.String)">
+            <summary>
+            Sets the sprite to the one with the given name, or returns FALSE if none corresponds
+            </summary>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.IHOtk2dSlicedSprite.GetSpriteName">
+            <summary>
+            Returns the name of the sprite in the collection (add this method to tk2dBaseSprite)
             </summary>
         </member>
         <member name="P:Holoville.HO2DToolkit.IHOtk2dSlicedSprite.dimensions">
