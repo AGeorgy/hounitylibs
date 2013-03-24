@@ -116,6 +116,11 @@
             Commits the changes to the text
             </summary>
         </member>
+        <member name="M:Holoville.HO2DToolkit.IHOtk2dTextMesh.GetMeshDimensionsForString(System.String)">
+            <summary>
+            Returns the mesh dimension for the given string
+            </summary>
+        </member>
         <member name="P:Holoville.HO2DToolkit.IHOtk2dTextMesh.text">
             <summary>
             Text

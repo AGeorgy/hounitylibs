@@ -36,5 +36,9 @@ namespace Holoville.HO2DToolkit
         /// Commits the changes to the text
         /// </summary>
         void Commit();
+        /// <summary>
+        /// Returns the mesh dimension for the given string
+        /// </summary>
+        Vector2 GetMeshDimensionsForString(string str);
     }
 }
