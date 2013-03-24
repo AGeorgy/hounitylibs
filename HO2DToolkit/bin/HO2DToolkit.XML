@@ -9,15 +9,17 @@
             Attach this component to a sprite to use it as a button.
             </summary>
         </member>
-        <member name="M:Holoville.HO2DToolkit.HOtk2dButton.ToggleOn">
+        <member name="M:Holoville.HO2DToolkit.HOtk2dButton.ToggleOn(System.Boolean)">
             <summary>
             Selects this button (only if it's a toggle button)
             </summary>
+            <param name="dispatchEvents">If TRUE dispatches relative events, otherwise ignores them</param>
         </member>
-        <member name="M:Holoville.HO2DToolkit.HOtk2dButton.ToggleOff">
+        <member name="M:Holoville.HO2DToolkit.HOtk2dButton.ToggleOff(System.Boolean)">
             <summary>
             Deselects this button (only if it's a toggle button)
             </summary>
+            <param name="dispatchEvents">If TRUE dispatches relative events, otherwise ignores them</param>
         </member>
         <member name="P:Holoville.HO2DToolkit.HOtk2dButton.selected">
             <summary>

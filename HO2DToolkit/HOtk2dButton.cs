@@ -29,7 +29,9 @@ namespace Holoville.HO2DToolkit
         enum PreinitActionType
         {
             ToggleOn,
-            ToggleOff
+            ToggleOnWithoutEventDispatching,
+            ToggleOff,
+            ToggleOffWithoutEventDispatching
         }
 
         /// <summary>
@@ -165,8 +167,14 @@ namespace Holoville.HO2DToolkit
                     case PreinitActionType.ToggleOn:
                         ToggleOn();
                         break;
+                    case PreinitActionType.ToggleOnWithoutEventDispatching:
+                        ToggleOn(false);
+                        break;
                     case PreinitActionType.ToggleOff:
                         ToggleOff();
+                        break;
+                    case PreinitActionType.ToggleOffWithoutEventDispatching:
+                        ToggleOff(false);
                         break;
                     }
                 }
@@ -204,27 +212,29 @@ namespace Holoville.HO2DToolkit
         /// <summary>
         /// Selects this button (only if it's a toggle button)
         /// </summary>
-        public void ToggleOn()
+        /// <param name="dispatchEvents">If TRUE dispatches relative events, otherwise ignores them</param>
+        public void ToggleOn(bool dispatchEvents = true)
         {
             if (!_initialized) {
                 if (_preinitActionsQueue == null) _preinitActionsQueue = new Queue<PreinitActionType>();
-                _preinitActionsQueue.Enqueue(PreinitActionType.ToggleOn);
+                _preinitActionsQueue.Enqueue(dispatchEvents ? PreinitActionType.ToggleOn : PreinitActionType.ToggleOnWithoutEventDispatching);
                 return;
             }
-            if (_isToggle && !selected) DoSelect();
+            if (_isToggle && !selected) DoSelect(dispatchEvents);
         }
 
         /// <summary>
         /// Deselects this button (only if it's a toggle button)
         /// </summary>
-        public void ToggleOff()
+        /// <param name="dispatchEvents">If TRUE dispatches relative events, otherwise ignores them</param>
+        public void ToggleOff(bool dispatchEvents = true)
         {
             if (!_initialized) {
                 if (_preinitActionsQueue == null) _preinitActionsQueue = new Queue<PreinitActionType>();
-                _preinitActionsQueue.Enqueue(PreinitActionType.ToggleOff);
+                _preinitActionsQueue.Enqueue(dispatchEvents ? PreinitActionType.ToggleOff : PreinitActionType.ToggleOffWithoutEventDispatching);
                 return;
             }
-            if (_isToggle && selected) DoDeselect();
+            if (_isToggle && selected) DoDeselect(dispatchEvents);
         }
 
         // ===================================================================================
@@ -313,10 +323,10 @@ namespace Holoville.HO2DToolkit
             DispatchEvent(this, Click, HOtk2dGUIManager.OnClick, HOtk2dButtonEventType.Click);
         }
 
-        void DoSelect()
+        void DoSelect(bool dispatchEvents = true)
         {
             if (selected) return;
-            if (_toggleGroupid != "") DeselectByGroupId(_toggleGroupid);
+            if (_toggleGroupid != "") DeselectByGroupId(_toggleGroupid, dispatchEvents);
             selected = true;
             switch (_toggleOn) {
             case ButtonActionType.OnRollover:
@@ -329,11 +339,13 @@ namespace Holoville.HO2DToolkit
                 if (_unclickTween != null) _unclickTween.Rewind();
                 break;
             }
-            DispatchEvent(this, Toggle, HOtk2dGUIManager.OnToggle, HOtk2dButtonEventType.Toggle);
-            DispatchEvent(this, Select, HOtk2dGUIManager.OnSelect, HOtk2dButtonEventType.Select);
+            if (dispatchEvents) {
+                DispatchEvent(this, Toggle, HOtk2dGUIManager.OnToggle, HOtk2dButtonEventType.Toggle);
+                DispatchEvent(this, Select, HOtk2dGUIManager.OnSelect, HOtk2dButtonEventType.Select);
+            }
         }
 
-        void DoDeselect()
+        void DoDeselect(bool dispatchEvents = true)
         {
             if (!selected) return;
             selected = false;
@@ -348,17 +360,19 @@ namespace Holoville.HO2DToolkit
                 if (_unclickTween != null) _unclickTween.Restart();
                 break;
             }
-            DispatchEvent(this, Toggle, HOtk2dGUIManager.OnToggle, HOtk2dButtonEventType.Toggle);
-            DispatchEvent(this, Deselect, HOtk2dGUIManager.OnDeselect, HOtk2dButtonEventType.Deselect);
+            if (dispatchEvents) {
+                DispatchEvent(this, Toggle, HOtk2dGUIManager.OnToggle, HOtk2dButtonEventType.Toggle);
+                DispatchEvent(this, Deselect, HOtk2dGUIManager.OnDeselect, HOtk2dButtonEventType.Deselect);
+            }
         }
 
-        static void DeselectByGroupId(string id)
+        static void DeselectByGroupId(string id, bool dispatchEvents = true)
         {
             List<HOtk2dButton> buttons = _TogglesByGroupId[id];
             int len = buttons.Count - 1;
             for (int i = len; i > -1; --i) {
                 if (i > buttons.Count - 1) continue;
-                buttons[i].DoDeselect();
+                buttons[i].DoDeselect(dispatchEvents);
             }
         }
 
