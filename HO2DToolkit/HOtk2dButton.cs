@@ -237,6 +237,14 @@ namespace Holoville.HO2DToolkit
             if (_isToggle && selected) DoDeselect(dispatchEvents);
         }
 
+        /// <summary>
+        /// Presses this button programmatically and dispatches relative events.
+        /// </summary>
+        public void SimulatePress()
+        {
+            Refresh(true, MouseState.JustPressed, false);
+        }
+
         // ===================================================================================
         // METHODS ---------------------------------------------------------------------------
 

@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Holoville.HOEditorGUIFramework.Core;
 using UnityEditor;
 using UnityEngine;
@@ -40,6 +41,8 @@ namespace Holoville.HOEditorGUIFramework
         // VARS /////////////////////////////////////////////////////////
 
         static int _activePressButtonId = -1;
+
+        static MethodInfo _miGradientField;
 
 
         // ===================================================================================
@@ -535,6 +538,17 @@ namespace Holoville.HOEditorGUIFramework
         {
             GUIStyle style = new GUIStyle(HOGUIStyle.flatDividerBox) { margin = new RectOffset(0, 0, margin, margin), fixedHeight = height };
             _Horizontal(style, color, GUILayout.FlexibleSpace, null);
+        }
+
+        // HACKS TO USE HIDDEN UNITYEDITOR METHODS ///////////////////////////////////////////
+        
+        /// <summary>
+        /// Creates a Gradient field by using Unity 4.x hidden default one and Reflection.
+        /// </summary>
+        public static Gradient GradientField(string label, Gradient gradient, params GUILayoutOption[] options)
+        {
+            if (_miGradientField == null) _miGradientField = typeof(EditorGUILayout).GetMethod("GradientField", BindingFlags.NonPublic | BindingFlags.Static, null, new[] { typeof(string), typeof(Gradient), typeof(GUILayoutOption[]) }, null);
+            return _miGradientField.Invoke(null, new object[] { label, gradient, options }) as Gradient;
         }
     }
 }

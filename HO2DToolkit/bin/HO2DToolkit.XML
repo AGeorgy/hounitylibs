@@ -21,6 +21,11 @@
             </summary>
             <param name="dispatchEvents">If TRUE dispatches relative events, otherwise ignores them</param>
         </member>
+        <member name="M:Holoville.HO2DToolkit.HOtk2dButton.SimulatePress">
+            <summary>
+            Presses this button programmatically and dispatches relative events.
+            </summary>
+        </member>
         <member name="P:Holoville.HO2DToolkit.HOtk2dButton.selected">
             <summary>
             Returns TRUE if this button is a toggle and is actually selected
@@ -65,6 +70,12 @@
             <summary>
             Sets the sprite to the one with the given name, or returns FALSE if none corresponds
             </summary>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.IHOtk2dSprite.GetBounds">
+            <summary>
+            Gets the local space bounds of the sprite.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Holoville.HO2DToolkit.IHOtk2dSprite.GetSpriteName">
             <summary>
@@ -198,6 +209,12 @@
             <summary>
             Sets the sprite to the one with the given name, or returns FALSE if none corresponds
             </summary>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.IHOtk2dSlicedSprite.GetBounds">
+            <summary>
+            Gets the local space bounds of the sprite.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Holoville.HO2DToolkit.IHOtk2dSlicedSprite.GetSpriteName">
             <summary>

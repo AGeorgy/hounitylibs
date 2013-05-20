@@ -37,6 +37,11 @@ namespace Holoville.HO2DToolkit
         /// Sets the sprite to the one with the given name, or returns FALSE if none corresponds
         /// </summary>
         bool SetSprite(string name);
+        /// <summary>
+        /// Gets the local space bounds of the sprite.
+        /// </summary>
+        /// <returns></returns>
+        Bounds GetBounds();
 
         // MODS ADDED TO CODE
 

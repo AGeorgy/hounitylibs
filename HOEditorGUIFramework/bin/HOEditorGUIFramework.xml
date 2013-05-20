@@ -624,6 +624,11 @@
             <param name="margin">Top and bottom margin</param>
             <param name="height">Height of the divider</param>
         </member>
+        <member name="M:Holoville.HOEditorGUIFramework.HOGUILayout.GradientField(System.String,UnityEngine.Gradient,UnityEngine.GUILayoutOption[])">
+            <summary>
+            Creates a Gradient field by using Unity 4.x hidden default one and Reflection.
+            </summary>
+        </member>
         <member name="T:Holoville.HOEditorGUIFramework.HOGUIDrag">
             <summary>
             Manages drag of GUI elements.
