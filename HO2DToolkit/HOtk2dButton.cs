@@ -49,6 +49,7 @@ namespace Holoville.HO2DToolkit
 
         internal bool hasRollover { get { return _tweenColorOn == ButtonActionType.OnRollover || _tweenScaleOn == ButtonActionType.OnRollover; } }
 
+#pragma warning disable 649
         [SerializeField] Camera _guiCamera;
         [SerializeField] ButtonActionType _tweenColorOn = ButtonActionType.None;
         [SerializeField] ButtonActionType _tweenScaleOn = ButtonActionType.None;
@@ -57,9 +58,11 @@ namespace Holoville.HO2DToolkit
         [SerializeField] bool _tweenChildren; // only used for color, since otherwise children are scaled automatically
         [SerializeField] bool _isToggle = false;
         [SerializeField] ButtonActionType _toggleOn = ButtonActionType.OnPress;
+        [SerializeField] ButtonActionType _toggleOnAnimation = ButtonActionType.OnPress;
         [SerializeField] string _toggleGroupid = "";
+#pragma warning restore 649
 
-        const float _TweenDuration = 0.25f;
+        const float _TweenDuration = 0.35f;
         static readonly Dictionary<string, List<HOtk2dButton>> _TogglesByGroupId = new Dictionary<string, List<HOtk2dButton>>();
 
         bool _initialized;
@@ -100,7 +103,7 @@ namespace Holoville.HO2DToolkit
                 Component[] children = gameObject.GetComponentsInChildren(typeof(IHOtk2dBase));
                 childrenSprites = new List<IHOtk2dBase>();
                 foreach (Component child in children) {
-                    if (child == this.sprite) continue;
+                    if (child == sprite) continue;
                     childrenSprites.Add(child as IHOtk2dBase);
                     IHOtk2dTextMesh txtMesh = child as IHOtk2dTextMesh;
                     if (txtMesh != null) _txtMeshesToUpdate.Add(txtMesh);
@@ -288,7 +291,7 @@ namespace Holoville.HO2DToolkit
         void DoRollOut(bool instantTween = false)
         {
             _isOver = false;
-            if (!_isToggle || _toggleOn != ButtonActionType.OnRollover) {
+            if (!_isToggle || _toggleOn != ButtonActionType.OnRollover && (!selected || selected && _toggleOnAnimation != ButtonActionType.OnRollover)) {
                 if (_rolloutTween != null) {
                     if (instantTween) _rolloutTween.Complete();
                     else _rolloutTween.Play();
@@ -311,7 +314,7 @@ namespace Holoville.HO2DToolkit
         void DoRelease(bool hasMouseFocus, bool instantTween = false)
         {
             _isPressed = false;
-            if (!_isToggle || _toggleOn != ButtonActionType.OnPress) {
+            if (!_isToggle || _toggleOn != ButtonActionType.OnPress && (!selected || selected && _toggleOnAnimation != ButtonActionType.OnPress)) {
                 if (_unpressTween != null) {
                     if (instantTween) _unpressTween.Complete();
                     else _unpressTween.Restart();
@@ -336,7 +339,7 @@ namespace Holoville.HO2DToolkit
             if (selected) return;
             if (_toggleGroupid != "") DeselectByGroupId(_toggleGroupid, dispatchEvents);
             selected = true;
-            switch (_toggleOn) {
+            switch (_toggleOnAnimation) {
             case ButtonActionType.OnRollover:
                 if (_rolloutTween != null) _rolloutTween.Rewind();
                 break;
@@ -357,7 +360,7 @@ namespace Holoville.HO2DToolkit
         {
             if (!selected) return;
             selected = false;
-            switch (_toggleOn) {
+            switch (_toggleOnAnimation) {
             case ButtonActionType.OnRollover:
                 if (_rolloutTween != null) _rolloutTween.Restart();
                 break;
