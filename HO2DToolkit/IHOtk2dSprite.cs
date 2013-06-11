@@ -8,6 +8,8 @@ namespace Holoville.HO2DToolkit
 {
     /// <summary>
     /// Interface to add to the tk2dBaseSprite class in order to use the HO2DToolkit library.
+    /// Also, add this code as the first line inside tk2dBaseSprite class:
+    /// public string GetSpriteName() { return CurrentSprite.name; }
     /// </summary>
     public interface IHOtk2dSprite : IHOtk2dBase
     {
