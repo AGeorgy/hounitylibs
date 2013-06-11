@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Holoville.HO2DToolkit
 {
+    /// <summary>
+    /// Interface to add to the tk2dSlicedSprite class in order to use the HO2DToolkit library.
+    /// </summary>
     public interface IHOtk2dSlicedSprite : IHOtk2dSprite
     {
         /// <summary>

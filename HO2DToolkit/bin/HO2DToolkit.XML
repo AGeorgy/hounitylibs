@@ -205,6 +205,11 @@
             The mouse rolled out of a button which has a rollover animation
             </summary>
         </member>
+        <member name="T:Holoville.HO2DToolkit.IHOtk2dSlicedSprite">
+            <summary>
+            Interface to add to the tk2dSlicedSprite class in order to use the HO2DToolkit library.
+            </summary>
+        </member>
         <member name="M:Holoville.HO2DToolkit.IHOtk2dSlicedSprite.SetSprite(System.String)">
             <summary>
             Sets the sprite to the one with the given name, or returns FALSE if none corresponds
