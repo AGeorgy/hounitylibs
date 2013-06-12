@@ -49,6 +49,7 @@
     <Compile Include="HOPanelUtils.cs" />
     <Compile Include="HOFileUtils.cs" />
     <Compile Include="HOPrefabUtils.cs" />
+    <Compile Include="HOSoundUtils.cs" />
     <Compile Include="HOSystemInfo.cs" />
     <Compile Include="HOTextureUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

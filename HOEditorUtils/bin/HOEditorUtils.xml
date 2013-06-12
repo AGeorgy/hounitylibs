@@ -210,6 +210,26 @@
             iOS
             </summary>
         </member>
+        <member name="T:Holoville.HOEditorUtils.HOSoundUtils">
+            <summary>
+            Various editor sound utils
+            </summary>
+        </member>
+        <member name="M:Holoville.HOEditorUtils.HOSoundUtils.PlayClip(UnityEngine.AudioClip)">
+            <summary>
+            Plays the given clip in the Editor
+            </summary>
+        </member>
+        <member name="M:Holoville.HOEditorUtils.HOSoundUtils.StopClip(UnityEngine.AudioClip)">
+            <summary>
+            Stops playing the given clip.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOEditorUtils.HOSoundUtils.StopAllClips">
+            <summary>
+            Stops all clips playing.
+            </summary>
+        </member>
         <member name="T:Holoville.HOEditorUtils.HOPanelUtils">
             <summary>
             Utils for editor panels (of type <see cref="T:UnityEditor.Editor"/> or <see cref="T:UnityEditor.EditorWindow"/>).
