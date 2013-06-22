@@ -45,6 +45,17 @@ namespace Holoville.HO2DToolkit
             get { if (_guiCamera == null) _guiCamera = HOtk2dGUIManager.defaultGuiCamera; return _guiCamera; }
             set { ChangeCamera(value); }
         }
+        public string text {
+            get {
+                if (_textMesh == null) _textMesh = this.GetComponentInChildren(typeof(IHOtk2dTextMesh)) as IHOtk2dTextMesh;
+                return _textMesh.text;
+            }
+            set {
+                if (_textMesh == null) _textMesh = this.GetComponentInChildren(typeof(IHOtk2dTextMesh)) as IHOtk2dTextMesh;
+                _textMesh.text = value;
+                _textMesh.Commit();
+            }
+        }
         public bool isToggle { get { return _isToggle; } }
 
         internal bool hasRollover { get { return _tweenColorOn == ButtonActionType.OnRollover || _tweenScaleOn == ButtonActionType.OnRollover; } }
@@ -74,6 +85,7 @@ namespace Holoville.HO2DToolkit
         Sequence _rolloutTween;
         Sequence _unpressTween;
         Sequence _unclickTween;
+        IHOtk2dTextMesh _textMesh; // eventual
         Transform _fooTrans;
         IHOtk2dSprite _fooSprite;
 
