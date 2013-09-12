@@ -291,6 +291,8 @@ namespace Holoville.HO2DToolkit
 
         void DoRollOver()
         {
+            if (!HOtk2dGUIManager.rolloversEnabled) return;
+
             _isOver = true;
             if (_isToggle && _toggleOn == ButtonActionType.OnRollover) {
                 if (selected && !_isRadioButton) DoDeselect(); else DoSelect();
@@ -302,6 +304,8 @@ namespace Holoville.HO2DToolkit
 
         void DoRollOut(bool instantTween = false)
         {
+            if (!HOtk2dGUIManager.rolloversEnabled) return;
+
             _isOver = false;
             if (!_isToggle || _toggleOn != ButtonActionType.OnRollover && (!selected || selected && _toggleOnAnimation != ButtonActionType.OnRollover)) {
                 if (_rolloutTween != null) {
@@ -391,6 +395,7 @@ namespace Holoville.HO2DToolkit
 
         static void DeselectByGroupId(string id, bool dispatchEvents = true)
         {
+            if (!_TogglesByGroupId.ContainsKey(id)) return;
             List<HOtk2dButton> buttons = _TogglesByGroupId[id];
             int len = buttons.Count - 1;
             for (int i = len; i > -1; --i) {

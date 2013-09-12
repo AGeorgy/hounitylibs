@@ -115,6 +115,11 @@
             automatically added at runtime when needed.
             </summary>
         </member>
+        <member name="F:Holoville.HO2DToolkit.HOtk2dGUIManager.rolloversEnabled">
+            <summary>
+            If set to FALSE, rollover events and animations won't happen
+            </summary>
+        </member>
         <member name="P:Holoville.HO2DToolkit.HOtk2dGUIManager.defaultGuiCamera">
             <summary>
             Camera that will be used for all new buttons that don't have a camera set.

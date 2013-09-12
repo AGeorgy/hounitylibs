@@ -39,6 +39,10 @@ namespace Holoville.HO2DToolkit
             get { if (_defaultGuiCamera == null) _defaultGuiCamera = Camera.main; return _defaultGuiCamera; }
             set { _defaultGuiCamera = value; }
         }
+        /// <summary>
+        /// If set to FALSE, rollover events and animations won't happen
+        /// </summary>
+        public static bool rolloversEnabled = true;
 
         static readonly List<HOtk2dButton> _Buttons = new List<HOtk2dButton>();
         static readonly Dictionary<Transform, HOtk2dButton> _ButtonsByTrans = new Dictionary<Transform, HOtk2dButton>();
@@ -109,7 +113,7 @@ namespace Holoville.HO2DToolkit
             _Cams.Clear();
             _hasRollovers = false;
             foreach (HOtk2dButton button in _Buttons) {
-                if (button.hasRollover) _hasRollovers = true;
+                if (rolloversEnabled && button.hasRollover) _hasRollovers = true;
                 if (_Cams.IndexOf(button.guiCamera) == -1) _Cams.Add(button.guiCamera);
             }
             _requiresDataRefresh = false;

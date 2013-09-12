@@ -123,7 +123,7 @@ namespace Holoville.HOEditorGUIFramework
             // Foldout
             GUIStyle defFoldout = new GUIStyle(EditorStyles.foldout);
             foldoutClosedButton = new GUIStyle(GUI.skin.button) {
-                alignment = TextAnchor.UpperLeft, active = { background = null }, fixedWidth = IconButtonWidth,
+                alignment = TextAnchor.UpperLeft, active = { background = null }, fixedWidth = 14,
                 normal = { background = defFoldout.normal.background }, border = defFoldout.border
             };
             foldoutClosedButton.padding.left += 8;
