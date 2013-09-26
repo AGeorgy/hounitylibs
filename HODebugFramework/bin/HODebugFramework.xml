@@ -27,7 +27,8 @@
         </member>
         <member name="F:Holoville.DebugFramework.Components.HOFpsGadget.limitFrameRate">
             <summary>
-            If different than -1 forces the given framerate.
+            If different than 0 forces the given framerate.
+            Set it to 0 if you don't want HOFpsGadget to do anything with Application.targetFrameRate.
             </summary>
         </member>
         <member name="T:Holoville.DebugFramework.HORuntimeGizmos">

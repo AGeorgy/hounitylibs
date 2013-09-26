@@ -26,7 +26,8 @@ namespace Holoville.DebugFramework.Components
         /// </summary>
         public TextAlignment alignment = TextAlignment.Right;
         /// <summary>
-        /// If different than -1 forces the given framerate.
+        /// If different than 0 forces the given framerate.
+        /// Set it to 0 if you don't want HOFpsGadget to do anything with Application.targetFrameRate.
         /// </summary>
         public int limitFrameRate = -1;
 
@@ -45,7 +46,11 @@ namespace Holoville.DebugFramework.Components
         void Awake()
         {
             _timeleft = updateDelay;
-            Application.targetFrameRate = limitFrameRate;
+        }
+
+        void Start()
+        {
+            if (limitFrameRate != 0) Application.targetFrameRate = limitFrameRate;
         }
 
         void Update()
