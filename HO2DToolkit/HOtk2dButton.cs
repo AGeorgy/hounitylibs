@@ -71,6 +71,7 @@ namespace Holoville.HO2DToolkit
         [SerializeField] ButtonActionType _toggleOn = ButtonActionType.OnPress;
         [SerializeField] ButtonActionType _toggleOnAnimation = ButtonActionType.OnPress;
         [SerializeField] string _toggleGroupid = "";
+        [SerializeField] GameObject _tooltip; // shows tooltip on rollover if not null
 #pragma warning restore 649
 
         const float _TweenDuration = 0.35f;
@@ -123,6 +124,9 @@ namespace Holoville.HO2DToolkit
                 hasChildrenToTween = childrenSprites.Count > 0;
                 hasTextMeshesToTween = _txtMeshesToUpdate.Count > 0;
             }
+
+            // Hide eventual tooltip
+            if (_tooltip != null) _tooltip.SetActive(false);
 
             // Create tweens
             SequenceParms seqParms;
@@ -266,7 +270,7 @@ namespace Holoville.HO2DToolkit
         internal void Refresh(bool hasMouseFocus, MouseState mouseState, bool isMousePressed)
         {
             if (hasMouseFocus) {
-                if (hasRollover && !isMousePressed && !_isOver) DoRollOver();
+                if ((hasRollover || _tooltip != null) && !isMousePressed && !_isOver) DoRollOver();
                 if (mouseState == MouseState.JustPressed && !_isPressed) DoPress();
                 else if (mouseState == MouseState.Released && _isPressed) DoRelease(true);
             } else if (_isOver || _isPressed) {
@@ -299,6 +303,7 @@ namespace Holoville.HO2DToolkit
             } else {
                 if (_rolloutTween != null) _rolloutTween.Rewind();
             }
+            if (_tooltip != null) _tooltip.SetActive(true);
             DispatchEvent(this, RollOver, HOtk2dGUIManager.OnRollOver, HOtk2dButtonEventType.RollOver);
         }
 
@@ -313,6 +318,7 @@ namespace Holoville.HO2DToolkit
                     else _rolloutTween.Play();
                 }
             }
+            if (_tooltip != null) _tooltip.SetActive(false);
             DispatchEvent(this, RollOut, HOtk2dGUIManager.OnRollOut, HOtk2dButtonEventType.RollOut);
         }
 

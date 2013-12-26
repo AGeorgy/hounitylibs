@@ -2,6 +2,7 @@
 // Copyright (c) 2012 Daniele Giardini - Holoville - http://www.holoville.com
 // Created: 2012/10/05 12:51
 
+using System.Text;
 using UnityEngine;
 
 namespace Holoville.DebugFramework.Components
@@ -33,9 +34,13 @@ namespace Holoville.DebugFramework.Components
 
         float _accum = 0;
         int _frames = 0;
+        int _totFps;
+        string _avrgFps;
+        float _time = 0;
         float _timeleft;
         string _fps = "";
         string _memory = "";
+        readonly StringBuilder _msg = new StringBuilder(40);
         bool _stylesSet;
         GUIStyle _fpsStyle;
 
@@ -66,6 +71,16 @@ namespace Holoville.DebugFramework.Components
                 _frames = 0;
                 if (showMemory) _memory = string.Format("{0:#,0}", System.GC.GetTotalMemory(false));
             }
+            // Calculate average
+            if (Time.deltaTime > 0) {
+                _time += Time.timeScale / Time.deltaTime;
+                _totFps++;
+                _avrgFps = (_time / _totFps).ToString("f2");
+                // Message
+                _msg.Remove(0, _msg.Length);
+                _msg.Append("FPS: ").Append(_fps).Append(" / ").Append(_avrgFps);
+                if (showMemory) _msg.Append(" / ").Append(_memory);
+            }
         }
 
         void OnGUI()
@@ -75,20 +90,19 @@ namespace Holoville.DebugFramework.Components
                 _fpsStyle = new GUIStyle(GUI.skin.box) { alignment = TextAnchor.UpperLeft, normal = { textColor = Color.white } };
             }
 
-            int boxW = (showMemory ? 190 : 100);
+            int boxW = (showMemory ? 270 : 180);
             int boxWHalf = (int)(boxW * 0.5f);
-            string msg = "FPS: " + _fps + (showMemory ? " / " + _memory : "");
 
             switch (alignment) {
-                case TextAlignment.Left:
-                    GUI.Label(new Rect(4, 4, boxW, 22), msg, _fpsStyle);
-                    break;
-                case TextAlignment.Center:
-                    GUI.Label(new Rect(Screen.width * 0.5f - boxWHalf, 4, boxW, 22), msg, _fpsStyle);
-                    break;
-                default:
-                    GUI.Label(new Rect(Screen.width - 104, 4, boxW, 22), msg, _fpsStyle);
-                    break;
+            case TextAlignment.Left:
+                GUI.Label(new Rect(4, 4, boxW, 22), _msg.ToString(), _fpsStyle);
+                break;
+            case TextAlignment.Center:
+                GUI.Label(new Rect(Screen.width * 0.5f - boxWHalf, 4, boxW, 22), _msg.ToString(), _fpsStyle);
+                break;
+            default:
+                GUI.Label(new Rect(Screen.width - 104, 4, boxW, 22), _msg.ToString(), _fpsStyle);
+                break;
             }
         }
     }
