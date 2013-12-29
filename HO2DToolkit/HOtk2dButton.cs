@@ -259,6 +259,22 @@ namespace Holoville.HO2DToolkit
         /// <summary>
         /// Presses this button programmatically and dispatches relative events.
         /// </summary>
+        public void SimulateRollOver()
+        {
+            Refresh(true, MouseState.Up, false);
+        }
+
+        /// <summary>
+        /// Presses this button programmatically and dispatches relative events.
+        /// </summary>
+        public void SimulateRollOut()
+        {
+            Refresh(false, MouseState.Up, false);
+        }
+
+        /// <summary>
+        /// Presses this button programmatically and dispatches relative events.
+        /// </summary>
         public void SimulatePress()
         {
             Refresh(true, MouseState.JustPressed, false);

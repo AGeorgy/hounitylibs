@@ -4,6 +4,22 @@
         <name>HO2DToolkit</name>
     </assembly>
     <members>
+        <member name="T:Holoville.HO2DToolkit.HOtk2dMenuControlSystem">
+            <summary>
+            Allows to control menu systems with a keyboard.
+            Doesn't detect key movememnts automatically: inputs must be called with up/down/left/right/enter.
+            Supports a max of 5 separate button panels.
+            // TODO complete separate panels support
+            </summary>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.HOtk2dMenuControlSystem.Activate(UnityEngine.Transform,System.String,System.Boolean)">
+            <summary>
+            Activates the control system on all the <see cref="T:Holoville.HO2DToolkit.HOtk2dButton"/> children of the given parent.
+            </summary>
+            <param name="parent">Panel whose children to control</param>
+            <param name="focusElementName">Optional name of the button to focus on</param>
+            <param name="forceRefresh">If FALSE, doesn't refresh the control system in case the panel is already active</param>
+        </member>
         <member name="T:Holoville.HO2DToolkit.HOtk2dButton">
             <summary>
             Attach this component to a sprite to use it as a button.
@@ -20,6 +36,16 @@
             Deselects this button (only if it's a toggle button)
             </summary>
             <param name="dispatchEvents">If TRUE dispatches relative events, otherwise ignores them</param>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.HOtk2dButton.SimulateRollOver">
+            <summary>
+            Presses this button programmatically and dispatches relative events.
+            </summary>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.HOtk2dButton.SimulateRollOut">
+            <summary>
+            Presses this button programmatically and dispatches relative events.
+            </summary>
         </member>
         <member name="M:Holoville.HO2DToolkit.HOtk2dButton.SimulatePress">
             <summary>
