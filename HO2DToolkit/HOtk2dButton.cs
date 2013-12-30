@@ -57,6 +57,7 @@ namespace Holoville.HO2DToolkit
             }
         }
         public bool isToggle { get { return _isToggle; } }
+        public Bounds bounds { get { if (!_fooBoundsSet) { _fooBounds = this.collider.bounds; _fooBoundsSet = true; } return _fooBounds; } }
 
         internal bool hasRollover { get { return _tweenColorOn == ButtonActionType.OnRollover || _tweenScaleOn == ButtonActionType.OnRollover; } }
 
@@ -89,6 +90,8 @@ namespace Holoville.HO2DToolkit
         IHOtk2dTextMesh _textMesh; // eventual
         Transform _fooTrans;
         IHOtk2dSprite _fooSprite;
+        bool _fooBoundsSet;
+        Bounds _fooBounds;
 
         // ===================================================================================
         // UNITY METHODS ---------------------------------------------------------------------
