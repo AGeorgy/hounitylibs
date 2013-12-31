@@ -113,22 +113,42 @@ namespace Holoville.HO2DToolkit
         /// deactivating all existing groups.
         /// </summary>
         /// <param name="parent">Panel whose children to control</param>
-        /// <param name="focusElementName">Optional name of the button to focus on</param>
         /// <param name="forceRefresh">If FALSE, doesn't refresh the control system in case the panel is already active</param>
-        public static void Activate(Transform parent, string focusElementName = null, bool forceRefresh = false)
+        public static void Activate(Transform parent, bool forceRefresh = false)
         {
-            DoActivate(parent, focusElementName, forceRefresh, false);
+            DoActivate(parent, false, null, forceRefresh, false);
         }
         /// <summary>
         /// Activates the control system on all the <see cref="HOtk2dButton"/> children of the given parent,
         /// adding them to the existing controlled groups.
         /// </summary>
         /// <param name="parent">Panel whose children to control</param>
+        /// <param name="forceRefresh">If FALSE, doesn't refresh the control system in case the panel is already active</param>
+        public static void AddGroup(Transform parent, bool forceRefresh = false)
+        {
+            DoActivate(parent, false, null, forceRefresh, true);
+        }
+        /// <summary>
+        /// Activates the control system on all the <see cref="HOtk2dButton"/> children of the given parent,
+        /// deactivating all existing groups and setting the focus on the element with the given name, or the first element.
+        /// </summary>
+        /// <param name="parent">Panel whose children to control</param>
         /// <param name="focusElementName">Optional name of the button to focus on</param>
         /// <param name="forceRefresh">If FALSE, doesn't refresh the control system in case the panel is already active</param>
-        public static void AddGroup(Transform parent, string focusElementName = null, bool forceRefresh = false)
+        public static void ActivateWithFocus(Transform parent, string focusElementName = null, bool forceRefresh = false)
         {
-            DoActivate(parent, focusElementName, forceRefresh, true);
+            DoActivate(parent, true, focusElementName, forceRefresh, false);
+        }
+        /// <summary>
+        /// Activates the control system on all the <see cref="HOtk2dButton"/> children of the given parent,
+        /// adding them to the existing controlled groups and setting the focus on the element with the given name, or the first element.
+        /// </summary>
+        /// <param name="parent">Panel whose children to control</param>
+        /// <param name="focusElementName">Optional name of the button to focus on</param>
+        /// <param name="forceRefresh">If FALSE, doesn't refresh the control system in case the panel is already active</param>
+        public static void AddGroupWithFocus(Transform parent, string focusElementName = null, bool forceRefresh = false)
+        {
+            DoActivate(parent, true, focusElementName, forceRefresh, true);
         }
 
         public static void DeactivateGroup(Transform parent)
@@ -153,8 +173,11 @@ namespace Holoville.HO2DToolkit
         // ===================================================================================
         // METHODS ---------------------------------------------------------------------------
 
-        static void DoActivate(Transform parent, string focusElementName, bool forceRefresh, bool addAsNewGroup)
+        static void DoActivate(Transform parent, bool setFocus, string focusElementName, bool forceRefresh, bool addAsNewGroup)
         {
+            forceRefresh = forceRefresh
+                || focusElementName != null
+                || !addAsNewGroup && _ContentGroups.Count > 1;
             if (_ContentGroups.ContainsContentGroupParent(parent) && !forceRefresh) return;
 
             if (!addAsNewGroup) DeactivateAll();
@@ -197,8 +220,10 @@ namespace Holoville.HO2DToolkit
             _ContentGroups.Add(new ContentGroup(parent, uiElements));
 
             // Focus
-            if (focusElementName != null) FocusByName(focusElementName);
-            else _FocusManager.SetFocus(_ContentGroups[_ContentGroups.Count - 1], 0, 0);
+            if (setFocus) {
+                if (focusElementName != null) FocusByName(focusElementName);
+                else _FocusManager.SetFocus(_ContentGroups[_ContentGroups.Count - 1], 0, 0);
+            }
         }
 
         static void Unfocus()
@@ -417,6 +442,7 @@ namespace Holoville.HO2DToolkit
 
             public void SetFocus(ContentGroup focusContentGroup, int focusRowId, int focusColumnId)
             {
+                if (rolloverEffects && uiElement != null) uiElement.SimulateRollOut();
                 contentGroup = focusContentGroup;
                 rowId = focusRowId;
                 columnId = focusColumnId;
@@ -442,6 +468,7 @@ namespace Holoville.HO2DToolkit
                     _evidenceSprite.gameObject.SetActive(false);
                     if (_evidenceTween != null) _evidenceTween.Pause();
                 }
+                if (rolloverEffects && uiElement != null) uiElement.SimulateRollOut();
                 rowId = columnId = -1;
                 contentGroup = null;
                 uiElement = null;

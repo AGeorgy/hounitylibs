@@ -87,7 +87,8 @@ namespace Holoville.HO2DToolkit
         Sequence _rolloutTween;
         Sequence _unpressTween;
         Sequence _unclickTween;
-        IHOtk2dTextMesh _textMesh; // eventual
+        IHOtk2dTextMesh _textMesh; // eventual textmesh
+        bool _isSimulatingMouseFocus;
         Transform _fooTrans;
         IHOtk2dSprite _fooSprite;
         bool _fooBoundsSet;
@@ -264,6 +265,7 @@ namespace Holoville.HO2DToolkit
         /// </summary>
         public void SimulateRollOver()
         {
+            _isSimulatingMouseFocus = true;
             Refresh(true, MouseState.Up, false);
         }
 
@@ -272,6 +274,7 @@ namespace Holoville.HO2DToolkit
         /// </summary>
         public void SimulateRollOut()
         {
+            _isSimulatingMouseFocus = false;
             Refresh(false, MouseState.Up, false);
         }
 
@@ -288,7 +291,7 @@ namespace Holoville.HO2DToolkit
 
         internal void Refresh(bool hasMouseFocus, MouseState mouseState, bool isMousePressed)
         {
-            if (hasMouseFocus) {
+            if (hasMouseFocus || _isSimulatingMouseFocus) {
                 if ((hasRollover || _tooltip != null) && !isMousePressed && !_isOver) DoRollOver();
                 if (mouseState == MouseState.JustPressed && !_isPressed) DoPress();
                 else if (mouseState == MouseState.Released && _isPressed) DoRelease(true);

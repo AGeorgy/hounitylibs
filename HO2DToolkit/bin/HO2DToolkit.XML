@@ -136,6 +136,48 @@
             Default to Camera.main if not set.
             </summary>
         </member>
+        <member name="T:Holoville.HO2DToolkit.HOMenuControlSystem">
+            <summary>
+            Allows to control menu systems with a keyboard.
+            Doesn't detect key movememnts automatically: inputs must be called with up/down/left/right/enter.
+            Supports a max of 10 separate button panels.
+            // TODO complete separate panels support
+            </summary>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.HOMenuControlSystem.Activate(UnityEngine.Transform,System.Boolean)">
+            <summary>
+            Activates the control system on all the <see cref="T:Holoville.HO2DToolkit.HOtk2dButton"/> children of the given parent,
+            deactivating all existing groups.
+            </summary>
+            <param name="parent">Panel whose children to control</param>
+            <param name="forceRefresh">If FALSE, doesn't refresh the control system in case the panel is already active</param>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.HOMenuControlSystem.AddGroup(UnityEngine.Transform,System.Boolean)">
+            <summary>
+            Activates the control system on all the <see cref="T:Holoville.HO2DToolkit.HOtk2dButton"/> children of the given parent,
+            adding them to the existing controlled groups.
+            </summary>
+            <param name="parent">Panel whose children to control</param>
+            <param name="forceRefresh">If FALSE, doesn't refresh the control system in case the panel is already active</param>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.HOMenuControlSystem.ActivateWithFocus(UnityEngine.Transform,System.String,System.Boolean)">
+            <summary>
+            Activates the control system on all the <see cref="T:Holoville.HO2DToolkit.HOtk2dButton"/> children of the given parent,
+            deactivating all existing groups and setting the focus on the element with the given name, or the first element.
+            </summary>
+            <param name="parent">Panel whose children to control</param>
+            <param name="focusElementName">Optional name of the button to focus on</param>
+            <param name="forceRefresh">If FALSE, doesn't refresh the control system in case the panel is already active</param>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.HOMenuControlSystem.AddGroupWithFocus(UnityEngine.Transform,System.String,System.Boolean)">
+            <summary>
+            Activates the control system on all the <see cref="T:Holoville.HO2DToolkit.HOtk2dButton"/> children of the given parent,
+            adding them to the existing controlled groups and setting the focus on the element with the given name, or the first element.
+            </summary>
+            <param name="parent">Panel whose children to control</param>
+            <param name="focusElementName">Optional name of the button to focus on</param>
+            <param name="forceRefresh">If FALSE, doesn't refresh the control system in case the panel is already active</param>
+        </member>
         <member name="T:Holoville.HO2DToolkit.IHOtk2dTextMesh">
             <summary>
             Interface to add to the tk2dTextMesh class in order to use the HO2DToolkit library.
@@ -279,32 +321,6 @@
             <summary>
             Transform
             </summary>
-        </member>
-        <member name="T:Holoville.HO2DToolkit.HOMenuControlSystem">
-            <summary>
-            Allows to control menu systems with a keyboard.
-            Doesn't detect key movememnts automatically: inputs must be called with up/down/left/right/enter.
-            Supports a max of 10 separate button panels.
-            // TODO complete separate panels support
-            </summary>
-        </member>
-        <member name="M:Holoville.HO2DToolkit.HOMenuControlSystem.Activate(UnityEngine.Transform,System.String,System.Boolean)">
-            <summary>
-            Activates the control system on all the <see cref="T:Holoville.HO2DToolkit.HOtk2dButton"/> children of the given parent,
-            deactivating all existing groups.
-            </summary>
-            <param name="parent">Panel whose children to control</param>
-            <param name="focusElementName">Optional name of the button to focus on</param>
-            <param name="forceRefresh">If FALSE, doesn't refresh the control system in case the panel is already active</param>
-        </member>
-        <member name="M:Holoville.HO2DToolkit.HOMenuControlSystem.AddGroup(UnityEngine.Transform,System.String,System.Boolean)">
-            <summary>
-            Activates the control system on all the <see cref="T:Holoville.HO2DToolkit.HOtk2dButton"/> children of the given parent,
-            adding them to the existing controlled groups.
-            </summary>
-            <param name="parent">Panel whose children to control</param>
-            <param name="focusElementName">Optional name of the button to focus on</param>
-            <param name="forceRefresh">If FALSE, doesn't refresh the control system in case the panel is already active</param>
         </member>
     </members>
 </doc>
