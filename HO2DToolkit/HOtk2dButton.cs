@@ -17,6 +17,14 @@ namespace Holoville.HO2DToolkit
     [RequireComponent(typeof(IHOtk2dSprite))]
     public class HOtk2dButton : MonoBehaviour
     {
+        enum PreinitActionType
+        {
+            ToggleOn,
+            ToggleOnWithoutEventDispatching,
+            ToggleOff,
+            ToggleOffWithoutEventDispatching
+        }
+
         public event HOTk2dButtonDelegate RollOver;
         public event HOTk2dButtonDelegate RollOut;
         public event HOTk2dButtonDelegate Press;
@@ -25,14 +33,6 @@ namespace Holoville.HO2DToolkit
         public event HOTk2dButtonDelegate Select;
         public event HOTk2dButtonDelegate Deselect;
         public event HOTk2dButtonDelegate Toggle;
-
-        enum PreinitActionType
-        {
-            ToggleOn,
-            ToggleOnWithoutEventDispatching,
-            ToggleOff,
-            ToggleOffWithoutEventDispatching
-        }
 
         /// <summary>
         /// Returns TRUE if this button is a toggle and is actually selected
@@ -293,8 +293,10 @@ namespace Holoville.HO2DToolkit
         {
             if (hasMouseFocus || _isSimulatingMouseFocus) {
                 if ((hasRollover || _tooltip != null) && !isMousePressed && !_isOver) DoRollOver();
-                if (mouseState == MouseState.JustPressed && !_isPressed) DoPress();
-                else if (mouseState == MouseState.Released && _isPressed) DoRelease(true);
+                if (mouseState == MouseState.JustPressed && !_isPressed) {
+                    DoPress();
+                    DoRelease(true);
+                } else if (mouseState == MouseState.Released && _isPressed) DoRelease(true);
             } else if (_isOver || _isPressed) {
                 if (_isPressed && mouseState == MouseState.Up) DoRelease(false);
                 if (_isOver && !isMousePressed) DoRollOut();

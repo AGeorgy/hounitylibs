@@ -55,6 +55,7 @@
     <Compile Include="HOMenuControlSystem.cs" />
     <Compile Include="IHOtk2dBase.cs" />
     <Compile Include="IHOtk2dSlicedSprite.cs" />
+    <Compile Include="IHOtk2dHorizontalSlider.cs" />
     <Compile Include="IHOtk2dSprite.cs" />
     <Compile Include="IHOtk2dTextMesh.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
