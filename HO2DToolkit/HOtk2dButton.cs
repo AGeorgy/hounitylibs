@@ -88,6 +88,7 @@ namespace Holoville.HO2DToolkit
         Sequence _unpressTween;
         Sequence _unclickTween;
         IHOtk2dTextMesh _textMesh; // eventual textmesh
+        bool _showTooltip;
         bool _isSimulatingMouseFocus;
         Transform _fooTrans;
         IHOtk2dSprite _fooSprite;
@@ -130,7 +131,10 @@ namespace Holoville.HO2DToolkit
             }
 
             // Hide eventual tooltip
-            if (_tooltip != null) _tooltip.SetActive(false);
+            if (_tooltip != null) {
+                _tooltip.SetActive(false);
+                _showTooltip = true;
+            }
 
             // Create tweens
             SequenceParms seqParms;
@@ -210,6 +214,7 @@ namespace Holoville.HO2DToolkit
             if (_isOver) DoRollOut(true);
             if (_isPressed) DoRelease(false, true);
             if (_unclickTween != null && !_unclickTween.isPaused) _unclickTween.Complete();
+            if (_tooltip != null) _tooltip.SetActive(false);
             HOtk2dGUIManager.RemoveButton(this);
             // Remove from eventual toggle group
             if (_toggleGroupid != "") {
@@ -261,6 +266,24 @@ namespace Holoville.HO2DToolkit
         }
 
         /// <summary>
+        /// Disables the eventual tooltip
+        /// </summary>
+        public void DisableTooltip()
+        {
+            _showTooltip = false;
+            if (_tooltip != null) _tooltip.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// Enables the eventual tooltip (enabled by default)
+        /// </summary>
+        public void EnableTooltip()
+        {
+            _showTooltip = _tooltip != null;
+            if (_isOver) _tooltip.SetActive(true);
+        }
+
+        /// <summary>
         /// Presses this button programmatically and dispatches relative events.
         /// </summary>
         public void SimulateRollOver()
@@ -292,10 +315,10 @@ namespace Holoville.HO2DToolkit
         internal void Refresh(bool hasMouseFocus, MouseState mouseState, bool isMousePressed)
         {
             if (hasMouseFocus || _isSimulatingMouseFocus) {
-                if ((hasRollover || _tooltip != null) && !isMousePressed && !_isOver) DoRollOver();
+                if ((hasRollover || _showTooltip) && !isMousePressed && !_isOver) DoRollOver();
                 if (mouseState == MouseState.JustPressed && !_isPressed) {
                     DoPress();
-                    DoRelease(true);
+//                    DoRelease(true);
                 } else if (mouseState == MouseState.Released && _isPressed) DoRelease(true);
             } else if (_isOver || _isPressed) {
                 if (_isPressed && mouseState == MouseState.Up) DoRelease(false);
@@ -327,7 +350,7 @@ namespace Holoville.HO2DToolkit
             } else {
                 if (_rolloutTween != null) _rolloutTween.Rewind();
             }
-            if (_tooltip != null) _tooltip.SetActive(true);
+            if (_showTooltip) _tooltip.SetActive(true);
             DispatchEvent(this, RollOver, HOtk2dGUIManager.OnRollOver, HOtk2dButtonEventType.RollOver);
         }
 
@@ -342,7 +365,7 @@ namespace Holoville.HO2DToolkit
                     else _rolloutTween.Play();
                 }
             }
-            if (_tooltip != null) _tooltip.SetActive(false);
+            if (_showTooltip) _tooltip.SetActive(false);
             DispatchEvent(this, RollOut, HOtk2dGUIManager.OnRollOut, HOtk2dButtonEventType.RollOut);
         }
 

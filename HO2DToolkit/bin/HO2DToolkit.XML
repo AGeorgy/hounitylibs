@@ -21,6 +21,16 @@
             </summary>
             <param name="dispatchEvents">If TRUE dispatches relative events, otherwise ignores them</param>
         </member>
+        <member name="M:Holoville.HO2DToolkit.HOtk2dButton.DisableTooltip">
+            <summary>
+            Disables the eventual tooltip
+            </summary>
+        </member>
+        <member name="M:Holoville.HO2DToolkit.HOtk2dButton.EnableTooltip">
+            <summary>
+            Enables the eventual tooltip (enabled by default)
+            </summary>
+        </member>
         <member name="M:Holoville.HO2DToolkit.HOtk2dButton.SimulateRollOver">
             <summary>
             Presses this button programmatically and dispatches relative events.
@@ -128,6 +138,11 @@
         <member name="F:Holoville.HO2DToolkit.HOtk2dGUIManager.rolloversEnabled">
             <summary>
             If set to FALSE, rollover events and animations won't happen
+            </summary>
+        </member>
+        <member name="F:Holoville.HO2DToolkit.HOtk2dGUIManager.use2DSystem">
+            <summary>
+            If TRUE uses 2D colliders and physics
             </summary>
         </member>
         <member name="P:Holoville.HO2DToolkit.HOtk2dGUIManager.defaultGuiCamera">

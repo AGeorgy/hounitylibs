@@ -40,7 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
-      <HintPath>C:\Program Files\_Design\Unity 4\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>C:\Program Files\_Design\Unity 4.3\Editor\Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -64,6 +64,8 @@
   <PropertyGroup>
     <PostBuildEvent>set DestinationDir=bin.Global\HO2DToolkit
 set FullDestinationDir=$(SolutionDir)..\%25DestinationDir%25
+set DestinationDirNoMeta=bin.Global_no_meta\HO2DToolkit
+set FullDestinationDirNoMeta=$(SolutionDir)..\%25DestinationDirNoMeta%25
 
 echo Deleting TMPs...
 DEL $(TargetDir)\*.tmp
@@ -75,7 +77,9 @@ DEL $(TargetName).pdb
 
 echo Exporting Assembly to %25FullDestinationDir%25
 echo Copying files to Destination...
-echo f | xcopy "$(ProjectDir)bin" %25FullDestinationDir%25 /Y /I /E</PostBuildEvent>
+echo f | xcopy "$(ProjectDir)bin" %25FullDestinationDir%25 /Y /I /E
+
+echo f | xcopy "$(ProjectDir)bin" %25FullDestinationDirNoMeta%25 /Y /I /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
