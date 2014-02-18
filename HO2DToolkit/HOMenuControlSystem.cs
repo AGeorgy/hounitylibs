@@ -190,6 +190,27 @@ namespace Holoville.HO2DToolkit
             }
         }
 
+        /// <summary>
+        /// Refreshes the current groups. Useful in case of layout changes withing the same group.
+        /// </summary>
+        public static void Refresh()
+        {
+            List<ContentGroup> currGroups = new List<ContentGroup>(_ContentGroups);
+            string currFocusName = _FocusManager.uiElement.name;
+            ContentGroup currFocusGroup = _FocusManager.contentGroup;
+            DeactivateAll();
+            for (int i = 0; i < currGroups.Count; ++i) {
+                ContentGroup cGroup = currGroups[i];
+                if (i == 0) {
+                    if (currFocusGroup == cGroup) Activate(cGroup.parent, currFocusName);
+                    else Activate(cGroup.parent);
+                } else {
+                    if (currFocusGroup == cGroup) AddGroup(cGroup.parent, currFocusName);
+                    else AddGroup(cGroup.parent);
+                }
+            }
+        }
+
         public static void DeactivateAll()
         {
             active = false;

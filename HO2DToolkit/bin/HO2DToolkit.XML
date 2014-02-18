@@ -207,6 +207,11 @@
             <param name="focusElementName">Optional name of the button to focus on</param>
             <param name="forceRefresh">If FALSE, doesn't refresh the control system in case the panel is already active</param>
         </member>
+        <member name="M:Holoville.HO2DToolkit.HOMenuControlSystem.Refresh">
+            <summary>
+            Refreshes the current groups. Useful in case of layout changes withing the same group.
+            </summary>
+        </member>
         <member name="T:Holoville.HO2DToolkit.IHOtk2dTextMesh">
             <summary>
             Interface to add to the tk2dTextMesh class in order to use the HO2DToolkit library.
