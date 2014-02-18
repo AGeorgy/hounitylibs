@@ -25,14 +25,61 @@ namespace Holoville.HO2DToolkit
             ToggleOffWithoutEventDispatching
         }
 
-        public event HOTk2dButtonDelegate RollOver;
-        public event HOTk2dButtonDelegate RollOut;
-        public event HOTk2dButtonDelegate Press;
-        public event HOTk2dButtonDelegate Release;
-        public event HOTk2dButtonDelegate Click;
-        public event HOTk2dButtonDelegate Select;
-        public event HOTk2dButtonDelegate Deselect;
-        public event HOTk2dButtonDelegate Toggle;
+        private HOTk2dButtonDelegate RollOverInvoker;
+        public event HOTk2dButtonDelegate RollOver
+        {
+            add { RollOverInvoker += value; }
+            remove { RollOverInvoker -= value; }
+        }
+
+        private HOTk2dButtonDelegate RollOutInvoker;
+        public event HOTk2dButtonDelegate RollOut
+        {
+            add { RollOutInvoker += value; }
+            remove { RollOutInvoker -= value; }
+        }
+
+        private HOTk2dButtonDelegate PressInvoker;
+        public event HOTk2dButtonDelegate Press
+        {
+            add { PressInvoker += value; }
+            remove { PressInvoker -= value; }
+        }
+
+        private HOTk2dButtonDelegate ReleaseInvoker;
+        public event HOTk2dButtonDelegate Release
+        {
+            add { ReleaseInvoker += value; }
+            remove { ReleaseInvoker -= value; }
+        }
+
+        private HOTk2dButtonDelegate ClickInvoker;
+        public event HOTk2dButtonDelegate Click
+        {
+            add { ClickInvoker += value; }
+            remove { ClickInvoker -= value; }
+        }
+
+        private HOTk2dButtonDelegate SelectInvoker;
+        public event HOTk2dButtonDelegate Select
+        {
+            add { SelectInvoker += value; }
+            remove { SelectInvoker -= value; }
+        }
+
+        private HOTk2dButtonDelegate DeselectInvoker;
+        public event HOTk2dButtonDelegate Deselect
+        {
+            add { DeselectInvoker += value; }
+            remove { DeselectInvoker -= value; }
+        }
+
+        private HOTk2dButtonDelegate ToggleInvoker;
+        public event HOTk2dButtonDelegate Toggle
+        {
+            add { ToggleInvoker += value; }
+            remove { ToggleInvoker -= value; }
+        }
 
         /// <summary>
         /// Returns TRUE if this button is a toggle and is actually selected
@@ -229,9 +276,9 @@ namespace Holoville.HO2DToolkit
             if (_rolloutTween != null) _rolloutTween.Kill();
             if (_unpressTween != null) _unpressTween.Kill();
             if (_unclickTween != null) _unclickTween.Kill();
-            RollOver = null; RollOut = null;
-            Press = null; Release = null;
-            Click = null; Select = null; Deselect = null;
+            RollOverInvoker = null; RollOutInvoker = null;
+            PressInvoker = null; ReleaseInvoker = null;
+            ClickInvoker = null; SelectInvoker = null; DeselectInvoker = null;
         }
 
         // ===================================================================================
@@ -351,7 +398,7 @@ namespace Holoville.HO2DToolkit
                 if (_rolloutTween != null) _rolloutTween.Rewind();
             }
             if (_showTooltip) _tooltip.SetActive(true);
-            DispatchEvent(this, RollOver, HOtk2dGUIManager.OnRollOver, HOtk2dButtonEventType.RollOver);
+            DispatchEvent(this, RollOverInvoker, HOtk2dGUIManager.OnRollOver, HOtk2dButtonEventType.RollOver);
         }
 
         void DoRollOut(bool instantTween = false)
@@ -366,7 +413,7 @@ namespace Holoville.HO2DToolkit
                 }
             }
             if (_showTooltip) _tooltip.SetActive(false);
-            DispatchEvent(this, RollOut, HOtk2dGUIManager.OnRollOut, HOtk2dButtonEventType.RollOut);
+            DispatchEvent(this, RollOutInvoker, HOtk2dGUIManager.OnRollOut, HOtk2dButtonEventType.RollOut);
         }
 
         void DoPress()
@@ -377,7 +424,7 @@ namespace Holoville.HO2DToolkit
             } else {
                 if (_unpressTween != null) _unpressTween.Rewind();
             }
-            DispatchEvent(this, Press, HOtk2dGUIManager.OnPress, HOtk2dButtonEventType.Press);
+            DispatchEvent(this, PressInvoker, HOtk2dGUIManager.OnPress, HOtk2dButtonEventType.Press);
         }
 
         void DoRelease(bool hasMouseFocus, bool instantTween = false)
@@ -390,7 +437,7 @@ namespace Holoville.HO2DToolkit
                 }
             }
             if (hasMouseFocus) DoClick();
-            DispatchEvent(this, Release, HOtk2dGUIManager.OnRelease, HOtk2dButtonEventType.Release);
+            DispatchEvent(this, ReleaseInvoker, HOtk2dGUIManager.OnRelease, HOtk2dButtonEventType.Release);
         }
 
         void DoClick()
@@ -400,7 +447,7 @@ namespace Holoville.HO2DToolkit
             } else {
                 if (_unclickTween != null) _unclickTween.Restart();
             }
-            DispatchEvent(this, Click, HOtk2dGUIManager.OnClick, HOtk2dButtonEventType.Click);
+            DispatchEvent(this, ClickInvoker, HOtk2dGUIManager.OnClick, HOtk2dButtonEventType.Click);
         }
 
         void DoSelect(bool dispatchEvents = true)
@@ -420,8 +467,8 @@ namespace Holoville.HO2DToolkit
                 break;
             }
             if (dispatchEvents) {
-                DispatchEvent(this, Toggle, HOtk2dGUIManager.OnToggle, HOtk2dButtonEventType.Toggle);
-                DispatchEvent(this, Select, HOtk2dGUIManager.OnSelect, HOtk2dButtonEventType.Select);
+                DispatchEvent(this, ToggleInvoker, HOtk2dGUIManager.OnToggle, HOtk2dButtonEventType.Toggle);
+                DispatchEvent(this, SelectInvoker, HOtk2dGUIManager.OnSelect, HOtk2dButtonEventType.Select);
             }
         }
 
@@ -441,8 +488,8 @@ namespace Holoville.HO2DToolkit
                 break;
             }
             if (dispatchEvents) {
-                DispatchEvent(this, Toggle, HOtk2dGUIManager.OnToggle, HOtk2dButtonEventType.Toggle);
-                DispatchEvent(this, Deselect, HOtk2dGUIManager.OnDeselect, HOtk2dButtonEventType.Deselect);
+                DispatchEvent(this, ToggleInvoker, HOtk2dGUIManager.OnToggle, HOtk2dButtonEventType.Toggle);
+                DispatchEvent(this, DeselectInvoker, HOtk2dGUIManager.OnDeselect, HOtk2dButtonEventType.Deselect);
             }
         }
 

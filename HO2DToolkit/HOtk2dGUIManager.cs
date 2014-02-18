@@ -14,22 +14,70 @@ namespace Holoville.HO2DToolkit
     /// </summary>
     public class HOtk2dGUIManager : MonoBehaviour
     {
-        public static event HOTk2dButtonDelegate RollOver;
-        internal static void OnRollOver(HOtk2dButtonEvent e) { if (RollOver != null) RollOver(e); }
-        public static event HOTk2dButtonDelegate RollOut;
-        internal static void OnRollOut(HOtk2dButtonEvent e) { if (RollOut != null) RollOut(e); }
-        public static event HOTk2dButtonDelegate Press;
-        internal static void OnPress(HOtk2dButtonEvent e) { if (Press != null) Press(e); }
-        public static event HOTk2dButtonDelegate Release;
-        internal static void OnRelease(HOtk2dButtonEvent e) { if (Release != null) Release(e); }
-        public static event HOTk2dButtonDelegate Click;
-        internal static void OnClick(HOtk2dButtonEvent e) { if (Click != null) Click(e); }
-        public static event HOTk2dButtonDelegate Select;
-        internal static void OnSelect(HOtk2dButtonEvent e) { if (Select != null) Select(e); }
-        public static event HOTk2dButtonDelegate Deselect;
-        internal static void OnDeselect(HOtk2dButtonEvent e) { if (Deselect != null) Deselect(e); }
-        public static event HOTk2dButtonDelegate Toggle;
-        internal static void OnToggle(HOtk2dButtonEvent e) { if (Toggle != null) Toggle(e); }
+        private static HOTk2dButtonDelegate RollOverInvoker;
+        public static event HOTk2dButtonDelegate RollOver
+        {
+            add { RollOverInvoker += value; }
+            remove { RollOverInvoker -= value; }
+        }
+
+        private static HOTk2dButtonDelegate RollOutInvoker;
+        public static event HOTk2dButtonDelegate RollOut
+        {
+            add { RollOutInvoker += value; }
+            remove { RollOutInvoker -= value; }
+        }
+
+        private static HOTk2dButtonDelegate PressInvoker;
+        public static event HOTk2dButtonDelegate Press
+        {
+            add { PressInvoker += value; }
+            remove { PressInvoker -= value; }
+        }
+
+        private static HOTk2dButtonDelegate ReleaseInvoker;
+        public static event HOTk2dButtonDelegate Release
+        {
+            add { ReleaseInvoker += value; }
+            remove { ReleaseInvoker -= value; }
+        }
+
+        private static HOTk2dButtonDelegate ClickInvoker;
+        public static event HOTk2dButtonDelegate Click
+        {
+            add { ClickInvoker += value; }
+            remove { ClickInvoker -= value; }
+        }
+
+        private static HOTk2dButtonDelegate SelectInvoker;
+        public static event HOTk2dButtonDelegate Select
+        {
+            add { SelectInvoker += value; }
+            remove { SelectInvoker -= value; }
+        }
+
+        private static HOTk2dButtonDelegate DeselectInvoker;
+        public static event HOTk2dButtonDelegate Deselect
+        {
+            add { DeselectInvoker += value; }
+            remove { DeselectInvoker -= value; }
+        }
+
+        private static HOTk2dButtonDelegate ToggleInvoker;
+        public static event HOTk2dButtonDelegate Toggle
+        {
+            add { ToggleInvoker += value; }
+            remove { ToggleInvoker -= value; }
+        }
+
+        internal static void OnRollOver(HOtk2dButtonEvent e) { if (RollOverInvoker != null) RollOverInvoker(e); }
+        internal static void OnRollOut(HOtk2dButtonEvent e) { if (RollOutInvoker != null) RollOutInvoker(e); }
+        internal static void OnPress(HOtk2dButtonEvent e) { if (PressInvoker != null) PressInvoker(e); }
+        internal static void OnRelease(HOtk2dButtonEvent e) { if (ReleaseInvoker != null) ReleaseInvoker(e); }
+        internal static void OnClick(HOtk2dButtonEvent e) { if (ClickInvoker != null) ClickInvoker(e); }
+        internal static void OnSelect(HOtk2dButtonEvent e) { if (SelectInvoker != null) SelectInvoker(e); }
+        internal static void OnDeselect(HOtk2dButtonEvent e) { if (DeselectInvoker != null) DeselectInvoker(e); }
+        internal static void OnToggle(HOtk2dButtonEvent e) { if (ToggleInvoker != null) ToggleInvoker(e); }
 
         /// <summary>
         /// Camera that will be used for all new buttons that don't have a camera set.
