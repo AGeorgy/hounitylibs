@@ -361,7 +361,7 @@ namespace Holoville.HO2DToolkit
 
         internal void Refresh(bool hasMouseFocus, MouseState mouseState, bool isMousePressed)
         {
-            if (hasMouseFocus || _isSimulatingMouseFocus) {
+            if (hasMouseFocus || (_isSimulatingMouseFocus && !isMousePressed)) {
                 if ((hasRollover || _showTooltip) && !isMousePressed && !_isOver) DoRollOver();
                 if (mouseState == MouseState.JustPressed && !_isPressed) {
                     DoPress();
