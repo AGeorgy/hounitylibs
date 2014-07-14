@@ -79,7 +79,7 @@ namespace Holoville.DebugFramework.Components
                 // Message
                 _msg.Remove(0, _msg.Length);
                 _msg.Append("FPS: ").Append(_fps).Append(" / ").Append(_avrgFps);
-                if (showMemory) _msg.Append(" / ").Append(_memory);
+                if (showMemory) _msg.Append("\nMEM: ").Append(_memory);
             }
         }
 
@@ -90,20 +90,30 @@ namespace Holoville.DebugFramework.Components
                 _fpsStyle = new GUIStyle(GUI.skin.box) { alignment = TextAnchor.UpperLeft, normal = { textColor = Color.white } };
             }
 
-            int boxW = (showMemory ? 270 : 180);
+            const int boxW = 150;
+            int boxH = (showMemory ? 36 : 23);
             int boxWHalf = (int)(boxW * 0.5f);
 
             switch (alignment) {
             case TextAlignment.Left:
-                GUI.Label(new Rect(4, 4, boxW, 22), _msg.ToString(), _fpsStyle);
+                GUI.Label(new Rect(4, 4, boxW, boxH), _msg.ToString(), _fpsStyle);
                 break;
             case TextAlignment.Center:
-                GUI.Label(new Rect(Screen.width * 0.5f - boxWHalf, 4, boxW, 22), _msg.ToString(), _fpsStyle);
+                GUI.Label(new Rect(Screen.width * 0.5f - boxWHalf, 4, boxW, boxH), _msg.ToString(), _fpsStyle);
                 break;
             default:
-                GUI.Label(new Rect(Screen.width - 104, 4, boxW, 22), _msg.ToString(), _fpsStyle);
+                GUI.Label(new Rect(Screen.width - boxW - 4, 4, boxW, boxH), _msg.ToString(), _fpsStyle);
                 break;
             }
+        }
+
+        // ===================================================================================
+        // PUBLIC METHODS --------------------------------------------------------------------
+
+        public void ResetFps()
+        {
+            _time = _timeleft = _accum = 0;
+            _totFps = 0;
         }
     }
 }
