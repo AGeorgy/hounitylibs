@@ -2,7 +2,7 @@
 // Copyright (c) 2013 Daniele Giardini - Holoville - http://www.holoville.com
 // Created: 2013/12/26 11:46
 
-using Holoville.HOTween;
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -55,12 +55,11 @@ namespace Holoville.HO2DToolkit
                 Color toCol = _evidenceSprite.color;
                 toCol.a *= 0.5f;
                 if (pTweenEvidence) {
-                    _evidenceTween = HOTween.HOTween.To(_evidenceSprite, 0.4f, new TweenParms()
-                        .Prop("color", toCol)
-                        .Loops(-1, LoopType.Yoyo)
-                        .Ease(EaseType.EaseInOutQuad)
-                        .Pause()
-                    );
+                    _evidenceTween = DOTween.To(() => _evidenceSprite.color, x => _evidenceSprite.color = x, toCol, 0.4f)
+                        .SetLoops(-1, LoopType.Yoyo)
+                        .SetEase(Ease.InOutQuad)
+                        .OnKill(() => _evidenceTween = null)
+                        .Pause();
                 }
             }
         }

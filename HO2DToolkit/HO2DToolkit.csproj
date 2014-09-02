@@ -34,8 +34,8 @@
     <DocumentationFile>bin\HO2DToolkit.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HOTween">
-      <HintPath>..\..\bin.Global\HOTween\HOTween.dll</HintPath>
+    <Reference Include="DOTween">
+      <HintPath>..\..\bin.Global\DOTween\DOTween.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
