@@ -187,7 +187,7 @@ namespace Holoville.HO2DToolkit
             TweenParms seqParms = new TweenParms();
             if (hasRollover) {
                 seqParms.Clear()
-                    .SetUpdate(UpdateType.Independent)
+                    .SetUpdate(true)
                     .SetAutoKill(false);
                 if (hasTextMeshesToTween) seqParms.OnUpdate(UpdateTextMeshes);
                 _rolloutTween = DOTween.Sequence().SetAs(seqParms)
@@ -208,7 +208,7 @@ namespace Holoville.HO2DToolkit
             }
             if (_tweenColorOn == ButtonActionType.OnPress || _tweenScaleOn == ButtonActionType.OnPress) {
                 seqParms = seqParms.Clear()
-                    .SetUpdate(UpdateType.Independent)
+                    .SetUpdate(true)
                     .SetAutoKill(false);
                 if (hasTextMeshesToTween) seqParms.OnUpdate(UpdateTextMeshes);
                 _unpressTween = DOTween.Sequence().SetAs(seqParms)
@@ -229,7 +229,7 @@ namespace Holoville.HO2DToolkit
             }
             if (_tweenColorOn == ButtonActionType.OnClick || _tweenScaleOn == ButtonActionType.OnClick) {
                 seqParms = seqParms.Clear()
-                    .SetUpdate(UpdateType.Independent)
+                    .SetUpdate(true)
                     .SetAutoKill(false);
                 if (hasTextMeshesToTween) seqParms.OnUpdate(UpdateTextMeshes);
                 _unclickTween = DOTween.Sequence().SetAs(seqParms)

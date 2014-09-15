@@ -2,6 +2,7 @@
 // Copyright (c) 2012 Daniele Giardini - Holoville - http://www.holoville.com
 // Created: 2012/10/05 12:51
 
+using System.Collections;
 using System.Text;
 using UnityEngine;
 
